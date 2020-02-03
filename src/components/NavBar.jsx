@@ -12,6 +12,8 @@ import Trails from './Trails';
 import Map from './Map';
 import Profile from './Profile';
 import '../css/NavBar.css';
+import { withScriptjs } from 'react-google-maps';
+import apiKey from '../apiKey';
 
 class NavBar extends Component {
   state = {
@@ -19,12 +21,23 @@ class NavBar extends Component {
     selectedTrail: NaN
   };
   render() {
+    const MapLoader = withScriptjs(Map);
+
     return (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
             <Route path="/components/Trails" component={Trails} exact={true} />
-            <Route path="/components/Map" component={Map} exact={true} />
+            <Route
+              path="/components/Map"
+              render={() => (
+                <MapLoader
+                  googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
+                  loadingElement={<div style={{ height: `100%` }} />}
+                />
+              )}
+              exact={true}
+            />
             <Route
               path="/components/Profile"
               component={Profile}
