@@ -11,8 +11,13 @@ import { IonReactRouter } from '@ionic/react-router';
 import Trails from './Trails';
 import Map from './Map';
 import Profile from './Profile';
+import '../css/NavBar.css';
 
 class NavBar extends Component {
+  state = {
+    trailList: [],
+    selectedTrail: NaN
+  };
   render() {
     return (
       <IonReactRouter>
