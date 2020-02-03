@@ -24,17 +24,25 @@ class NavBar extends Component {
     const MapLoader = withScriptjs(Map);
 
     return (
-      <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route path="/components/Trails" component={Trails} exact={true} />
+      <IonReactRouter className="NavBar">
+        <IonTabs className="NavBar">
+          <IonRouterOutlet className="Content">
             <Route
+              className="Trails"
+              path="/components/Trails"
+              component={Trails}
+              exact={true}
+            />
+            <Route
+              className="Content"
               path="/components/Map"
               render={() => (
-                <MapLoader
-                  googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
-                  loadingElement={<div style={{ height: `100%` }} />}
-                />
+                <div>
+                  <MapLoader
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
+                    loadingElement={<div style={{ height: `100%` }} />}
+                  />
+                </div>
               )}
               exact={true}
             />
@@ -44,7 +52,7 @@ class NavBar extends Component {
               exact={true}
             />
           </IonRouterOutlet>
-          <IonTabBar slot="bottom">
+          <IonTabBar className="tab" slot="bottom">
             <IonTabButton tab="trails" href="/components/Trails">
               <IonLabel>Trails</IonLabel>
             </IonTabButton>

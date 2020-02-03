@@ -5,7 +5,8 @@ import {
   GoogleMap,
   DirectionsRenderer
 } from 'react-google-maps';
-import { IonPage } from '@ionic/react';
+import { IonPage, IonContent } from '@ionic/react';
+import '../css/Map.css';
 
 class Map extends Component {
   state = {
@@ -51,8 +52,8 @@ class Map extends Component {
     return (
       <IonPage>
         <GoogleMapMain
-          containerElement={<div style={{ height: `93vh`, width: '100vw' }} />}
-          mapElement={<div style={{ height: `100%` }} />}
+          containerElement={<IonContent className="Map" />}
+          mapElement={<IonContent className="content" />}
         />
       </IonPage>
     );

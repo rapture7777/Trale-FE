@@ -1,3 +1,11 @@
 .Map {
+  height: 95vh;
+}
+
+.scroll {
+  height: 100%;
+}
+
+.Map .content {
   height: 100%;
 }
