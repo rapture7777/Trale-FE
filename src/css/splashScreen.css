@@ -1,0 +1,22 @@
+.splashScreen {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: 33% 33% 33%;
+  grid-template-areas:
+    "Header"
+    "age-verification" "Drink-responsibly";
+}
+
+.splashScreen .Header {
+  grid-area: Header;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  justify-content: flex-start;
+}
+.splashScreen .age-verification {
+  grid-area: age-verification;
+}
+.splashScreen .Drink-responsibly {
+  grid-area: Drink-responsibly;
+}

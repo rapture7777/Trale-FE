@@ -9,19 +9,22 @@ import {
   IonImg
 } from "@ionic/react";
 import React from "react";
+import "../css/splashScreen.css";
 
 const SplashScreen = () => {
   return (
-    <IonPage>
-      <IonTitle size="large">Welcome to trAle</IonTitle>
-      <IonItem>
+    <IonPage className="splashScreen">
+      <IonTitle className="Header" size="large">
+        Welcome to trAle
+      </IonTitle>
+      <IonItem className="age-verification">
         <IonLabel>DD-MM-YY</IonLabel>
         <IonDatetime
           displayFormat="DD-MM-YY"
           placeholder="Date of birth"
         ></IonDatetime>
       </IonItem>
-      <IonItem>
+      <IonItem className="Drink-responsibly">
         <IonText>Please drink responsibly</IonText>
         <IonThumbnail slot="start">
           <IonImg

@@ -1,0 +1,13 @@
+.app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas: "Main";
+}
+
+.app .splashScreen {
+  grid-area: Main;
+  min-width: 100%;
+  min-height: 100%;
+}
