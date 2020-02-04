@@ -1,0 +1,12 @@
+.Map-page {
+  height: 100vh;
+}
+
+.Map {
+  height: 100%;
+  position: absolute;
+}
+
+.Map .Content {
+  max-height: 100%;
+}

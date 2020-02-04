@@ -5,13 +5,15 @@ import {
   IonTabs,
   IonTabButton,
   IonLabel
-} from "@ionic/react";
-import { Route } from "react-router-dom";
-import { IonReactRouter } from "@ionic/react-router";
-import Trails from "./Trails";
-import Map from "./Map";
+} from '@ionic/react';
+import { Route } from 'react-router-dom';
+import { IonReactRouter } from '@ionic/react-router';
+import Trails from './Trails';
+import Map from './Map';
 import UserProfile from "./UserProfile";
-import "../css/NavBar.css";
+import '../css/NavBar.css';
+import { withScriptjs } from 'react-google-maps';
+import apiKey from '../apiKey';
 import axios from "axios";
 
 class NavBar extends Component {
@@ -43,12 +45,25 @@ class NavBar extends Component {
   };
 
   render() {
+    const MapLoader = withScriptjs(Map);
+
     return (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
             <Route path="/components/Trails" component={Trails} exact={true} />
-            <Route path="/components/Map" component={Map} exact={true} />
+            <Route
+              path="/components/Map"
+              render={() => (
+                <div>
+                  <MapLoader
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
+                    loadingElement={<div style={{ height: `100%` }} />}
+                  />
+                </div>
+              )}
+              exact={true}
+            />
             <Route
               path="/components/UserProfile"
               render={() => (
@@ -60,13 +75,18 @@ class NavBar extends Component {
               exact={true}
             />
           </IonRouterOutlet>
-          <IonTabBar slot="bottom">
+          <IonTabBar slot="bottom" translucent="true" className="Tabs">
             <IonTabButton tab="trails" href="/components/Trails">
-              <IonLabel>Trails</IonLabel>
+              <IonLabel>
+                <b>Trails</b>
+              </IonLabel>
             </IonTabButton>
             <IonTabButton tab="map" href="/components/Map">
-              <IonLabel>Map</IonLabel>
+              <IonLabel>
+                <b>Map</b>
+              </IonLabel>
             </IonTabButton>
+
             <IonTabButton tab="profile" href="/components/UserProfile">
               <IonLabel>Profile</IonLabel>
             </IonTabButton>
