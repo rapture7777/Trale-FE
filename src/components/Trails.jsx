@@ -6,11 +6,8 @@ import {
   IonCardContent,
   IonCard,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
-  IonHeader,
-  IonButton,
-  IonGrid
+  IonButton
 } from '@ionic/react';
 import '../css/Trails.css';
 

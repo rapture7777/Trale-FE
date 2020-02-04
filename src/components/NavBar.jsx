@@ -46,7 +46,7 @@ class NavBar extends Component {
               exact={true}
             />
           </IonRouterOutlet>
-          <IonTabBar slot="bottom">
+          <IonTabBar slot="bottom" translucent="true">
             <IonTabButton tab="trails" href="/components/Trails">
               <IonLabel>Trails</IonLabel>
             </IonTabButton>
