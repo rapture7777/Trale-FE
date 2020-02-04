@@ -1,4 +1,13 @@
-button {
-  justify-self: center;
-  align-self: center;
+.Title {
+  text-align: center;
+  padding-bottom: 0;
+}
+
+.Title h3 {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.page {
+  height: 90vh;
 }
