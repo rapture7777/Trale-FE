@@ -15,7 +15,7 @@ import {
 const UserProfile = () => {
   return (
     <IonPage>
-      <IonGrid>
+      <IonGrid className="userProfile">
         <IonRow>
           <IonCol>
             <IonAvatar>
@@ -44,33 +44,36 @@ const UserProfile = () => {
         </IonRow>
 
         <IonRow>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>In Progress Tralis</IonLabel>
-            </IonListHeader>
-            <IonItem>
-              <p>This trail "name of trail" is currently in progress..</p>
-            </IonItem>
-            <IonProgressBar value={0.5}></IonProgressBar>
-          </IonList>
+          <IonCol>
+            <IonList>
+              <IonListHeader>
+                <IonLabel>In Progress Tralis</IonLabel>
+              </IonListHeader>
+              <IonItem>
+                <p>This trail "name of trail" is currently in progress..</p>
+              </IonItem>
+              <IonProgressBar value={0.5}></IonProgressBar>
+            </IonList>
+          </IonCol>
         </IonRow>
 
         <IonRow>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>Completed Trails</IonLabel>
-            </IonListHeader>
-            <IonItem>
-              <p>
-                "Username" has completed this trail this is some longer text
-              </p>
-            </IonItem>
-            <IonProgressBar value={1}></IonProgressBar>
-          </IonList>
-          <IonItem>
-            <p>"Username" has completed this trail</p>
-          </IonItem>
-          <IonProgressBar value={1}></IonProgressBar>
+          <IonCol>
+            <IonList>
+              <IonListHeader>
+                <IonLabel>Completed Trails</IonLabel>
+              </IonListHeader>
+              <IonItem>
+                <p>"Username" has completed this trail</p>
+              </IonItem>
+              <IonProgressBar value={1}></IonProgressBar>
+
+              <IonItem>
+                <p>"Username" has completed this trail</p>
+              </IonItem>
+              <IonProgressBar value={1}></IonProgressBar>
+            </IonList>
+          </IonCol>
         </IonRow>
       </IonGrid>
     </IonPage>
