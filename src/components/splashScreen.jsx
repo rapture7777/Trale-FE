@@ -7,29 +7,20 @@ import {
   IonLabel,
   IonText,
   IonThumbnail,
-  IonImg
+  IonImg,
+  IonAlert
 } from "@ionic/react";
 import "../css/splashScreen.css";
+import { ageValidation } from "../utils";
 
 class SplashScreen extends Component {
-  state = { userVerified: 0 };
+  state = { userVerified: 1 };
 
   handleDateChange = event => {
-    event.preventDefault();
     const { value } = event.detail;
-
     if (value) {
-      let dateNow = new Date(value).toISOString();
-      let inputInMilliseconds = Date.parse(dateNow);
-      const eighteenYearsInMilliseconds = 567993600000;
-      let millisecondsNow = Date.now();
-      const eighteenYearsAgo = millisecondsNow - eighteenYearsInMilliseconds;
-
-      if (eighteenYearsAgo > inputInMilliseconds) {
-        this.setState({ userVerified: true });
-      } else {
-        this.setState({ userVerified: false });
-      }
+      const validAge = ageValidation(value);
+      this.setState({ userVerified: validAge });
     }
   };
 
@@ -57,6 +48,14 @@ class SplashScreen extends Component {
               }
             ></IonImg>
           </IonThumbnail>
+        </IonItem>
+        <IonItem>
+          <IonAlert
+            isOpen={!this.state.userVerified}
+            header={"Age Restriction"}
+            message={"You must be over 18 to use this app"}
+            buttons={["I understand"]}
+          ></IonAlert>
         </IonItem>
       </IonPage>
     );
