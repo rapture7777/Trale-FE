@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   IonRouterOutlet,
   IonTabBar,
   IonTabs,
   IonTabButton,
   IonLabel
-} from '@ionic/react';
-import { Route } from 'react-router-dom';
-import { IonReactRouter } from '@ionic/react-router';
-import Trails from './Trails';
-import Map from './Map';
-import Profile from './Profile';
-import '../css/NavBar.css';
+} from "@ionic/react";
+import { Route } from "react-router-dom";
+import { IonReactRouter } from "@ionic/react-router";
+import Trails from "./Trails";
+import Map from "./Map";
+import UserProfile from "./UserProfile";
+import "../css/NavBar.css";
 
 class NavBar extends Component {
   state = {
@@ -26,8 +26,8 @@ class NavBar extends Component {
             <Route path="/components/Trails" component={Trails} exact={true} />
             <Route path="/components/Map" component={Map} exact={true} />
             <Route
-              path="/components/Profile"
-              component={Profile}
+              path="/components/UserProfile"
+              component={UserProfile}
               exact={true}
             />
           </IonRouterOutlet>
@@ -38,7 +38,7 @@ class NavBar extends Component {
             <IonTabButton tab="map" href="/components/Map">
               <IonLabel>Map</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="profile" href="/components/Profile">
+            <IonTabButton tab="profile" href="/components/UserProfile">
               <IonLabel>Profile</IonLabel>
             </IonTabButton>
           </IonTabBar>
