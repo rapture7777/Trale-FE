@@ -1,33 +1,59 @@
 import React from 'react';
 import {
   IonPage,
-  IonToolbar,
-  IonTitle,
   IonCardContent,
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonButton
+  IonContent
 } from '@ionic/react';
 import '../css/Trails.css';
 
 const Trails = () => {
   return (
-    <IonPage>
-      <IonToolbar>
-        <IonTitle>Trails</IonTitle>
-      </IonToolbar>
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Transpennine Real Ale Trail</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          Keep close to Nature's heart... and break clear away, once in awhile,
-          and climb a mountain or spend a week in the woods. Wash your spirit
-          clean.
-        </IonCardContent>
-        <IonButton>Select</IonButton>
-      </IonCard>
+    <IonPage className="page">
+      <IonContent>
+        <h3 className="Title">Trails</h3>
+        <IonCard className="Trail-Card" button="true">
+          <IonCardHeader>
+            <IonCardTitle>Transpennine Real Ale Trail</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            As featured on the BBC's Oz and James Drink to Britain, The
+            Transpennine Real Ale Trail is a unique voyage to a selection of
+            Yorkshire and Lancashires best real ale pubs - on a train! <br />
+            <br />
+            All the pubs are within a stones throw of their respective Railway
+            Stations, so finding your way there (and back) couldn't be easier.
+          </IonCardContent>
+        </IonCard>
+        <IonCard className="Trail-Card" button="true">
+          <IonCardHeader>
+            <IonCardTitle>Number 2 Real Ale Trail</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            As featured on the BBC's Oz and James Drink to Britain, The
+            Transpennine Real Ale Trail is a unique voyage to a selection of
+            Yorkshire and Lancashires best real ale pubs - on a train! <br />
+            <br />
+            All the pubs are within a stones throw of their respective Railway
+            Stations, so finding your way there (and back) couldn't be easier.
+          </IonCardContent>
+        </IonCard>
+        <IonCard className="Trail-Card" button="true">
+          <IonCardHeader>
+            <IonCardTitle>Number 3 Real Ale Trail</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            As featured on the BBC's Oz and James Drink to Britain, The
+            Transpennine Real Ale Trail is a unique voyage to a selection of
+            Yorkshire and Lancashires best real ale pubs - on a train! <br />
+            <br />
+            All the pubs are within a stones throw of their respective Railway
+            Stations, so finding your way there (and back) couldn't be easier.
+          </IonCardContent>
+        </IonCard>
+      </IonContent>
     </IonPage>
   );
 };
