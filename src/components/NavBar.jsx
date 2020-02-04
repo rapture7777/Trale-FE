@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   IonRouterOutlet,
   IonTabBar,
@@ -10,16 +10,40 @@ import { Route } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
 import Trails from './Trails';
 import Map from './Map';
-import Profile from './Profile';
+import UserProfile from "./UserProfile";
 import '../css/NavBar.css';
 import { withScriptjs } from 'react-google-maps';
 import apiKey from '../apiKey';
+import axios from "axios";
 
 class NavBar extends Component {
   state = {
     trailList: [],
-    selectedTrail: NaN
+    selectedTrail: NaN,
+    user: {}
   };
+
+  componentDidMount = () => {
+    this.fetchUserById();
+    this.fetchAllTrails();
+  };
+
+  fetchAllTrails = () => {
+    return axios
+      .get("https://tralebackend.herokuapp.com/api/routes")
+      .then(({ data: { routes } }) => {
+        this.setState({ selectedTrail: routes[0].route_name });
+      });
+  };
+
+  fetchUserById = () => {
+    return axios
+      .get("https://tralebackend.herokuapp.com/api/users/1")
+      .then(({ data: { user } }) => {
+        this.setState({ user });
+      });
+  };
+
   render() {
     const MapLoader = withScriptjs(Map);
 
@@ -41,8 +65,13 @@ class NavBar extends Component {
               exact={true}
             />
             <Route
-              path="/components/Profile"
-              component={Profile}
+              path="/components/UserProfile"
+              render={() => (
+                <UserProfile
+                  user={this.state.user}
+                  selectedTrail={this.state.selectedTrail}
+                />
+              )}
               exact={true}
             />
           </IonRouterOutlet>
@@ -57,10 +86,9 @@ class NavBar extends Component {
                 <b>Map</b>
               </IonLabel>
             </IonTabButton>
-            <IonTabButton tab="profile" href="/components/Profile">
-              <IonLabel>
-                <b>Profile</b>
-              </IonLabel>
+
+            <IonTabButton tab="profile" href="/components/UserProfile">
+              <IonLabel>Profile</IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
