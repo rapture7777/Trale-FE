@@ -12,12 +12,23 @@ import Trails from "./Trails";
 import Map from "./Map";
 import UserProfile from "./UserProfile";
 import "../css/NavBar.css";
+import axios from "axios";
 
 class NavBar extends Component {
   state = {
     trailList: [],
-    selectedTrail: NaN
+    selectedTrail: NaN,
+    user: {}
   };
+
+  componentDidMount = () => {
+    return axios
+      .get("https://tralebackend.herokuapp.com/api/users/1")
+      .then(({ data: { user } }) => {
+        this.setState({ user });
+      });
+  };
+
   render() {
     return (
       <IonReactRouter>
@@ -27,7 +38,7 @@ class NavBar extends Component {
             <Route path="/components/Map" component={Map} exact={true} />
             <Route
               path="/components/UserProfile"
-              component={UserProfile}
+              render={() => <UserProfile user={this.state.user} />}
               exact={true}
             />
           </IonRouterOutlet>
