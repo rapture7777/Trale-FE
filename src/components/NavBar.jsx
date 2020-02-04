@@ -46,15 +46,21 @@ class NavBar extends Component {
               exact={true}
             />
           </IonRouterOutlet>
-          <IonTabBar slot="bottom" translucent="true">
+          <IonTabBar slot="bottom" translucent="true" className="Tabs">
             <IonTabButton tab="trails" href="/components/Trails">
-              <IonLabel>Trails</IonLabel>
+              <IonLabel>
+                <b>Trails</b>
+              </IonLabel>
             </IonTabButton>
             <IonTabButton tab="map" href="/components/Map">
-              <IonLabel>Map</IonLabel>
+              <IonLabel>
+                <b>Map</b>
+              </IonLabel>
             </IonTabButton>
             <IonTabButton tab="profile" href="/components/Profile">
-              <IonLabel>Profile</IonLabel>
+              <IonLabel>
+                <b>Profile</b>
+              </IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>

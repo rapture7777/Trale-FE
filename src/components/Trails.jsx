@@ -12,8 +12,8 @@ import '../css/Trails.css';
 const Trails = () => {
   return (
     <IonPage className="Trails-page">
-      <IonContent>
-        <h3 className="Title">Trails</h3>
+      <IonContent className="Trails-Content">
+        <h3 className="Title">Select a trail to see the route</h3>
         <IonCard className="Trail-Card" button="true">
           <IonCardHeader>
             <IonCardTitle>Transpennine Real Ale Trail</IonCardTitle>
