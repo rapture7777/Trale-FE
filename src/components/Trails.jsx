@@ -1,10 +1,36 @@
 import React from 'react';
-import { IonTitle, IonPage } from '@ionic/react';
+import {
+  IonPage,
+  IonToolbar,
+  IonTitle,
+  IonCardContent,
+  IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonHeader,
+  IonButton,
+  IonGrid
+} from '@ionic/react';
+import '../css/Trails.css';
 
 const Trails = () => {
   return (
     <IonPage>
-      <IonTitle>Trails</IonTitle>
+      <IonToolbar>
+        <IonTitle>Trails</IonTitle>
+      </IonToolbar>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Transpennine Real Ale Trail</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          Keep close to Nature's heart... and break clear away, once in awhile,
+          and climb a mountain or spend a week in the woods. Wash your spirit
+          clean.
+        </IonCardContent>
+        <IonButton>Select</IonButton>
+      </IonCard>
     </IonPage>
   );
 };

@@ -8,6 +8,11 @@ import {
   IonText,
   IonThumbnail,
   IonImg,
+  IonToolbar,
+  IonGrid,
+  IonCol,
+  IonRow,
+  IonHeader,
   IonAlert
 } from "@ionic/react";
 import "../css/splashScreen.css";
@@ -24,13 +29,18 @@ class SplashScreen extends Component {
     }
   };
 
-  render() {
-    return (
-      <IonPage className="splashScreen">
-        <IonTitle className="Header" size="large">
-          Welcome to trAle
-        </IonTitle>
-        <IonItem className="age-verification">
+const SplashScreen = () => {
+  return (
+    <IonGrid>
+      <IonPage>
+        <IonRow align-self-center>
+          <IonCol class="Header">
+            <h1>Welcome to trAle</h1>
+          </IonCol>
+        </IonRow>
+        <IonRow align-self-center>
+          <IonCol className="DateBox">
+            <IonItem>
           <IonLabel>DD-MM-YY</IonLabel>
           <IonDatetime
             value={""}
@@ -39,7 +49,11 @@ class SplashScreen extends Component {
             placeholder="Date of birth"
           ></IonDatetime>
         </IonItem>
-        <IonItem className="Drink-responsibly">
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol className="DrinkAware">
+            <IonItem className="Drink-responsibly">
           <IonText>Please drink responsibly</IonText>
           <IonThumbnail slot="start">
             <IonImg
@@ -49,7 +63,11 @@ class SplashScreen extends Component {
             ></IonImg>
           </IonThumbnail>
         </IonItem>
-        <IonItem>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol>
+            <IonItem>
           <IonAlert
             isOpen={!this.state.userVerified}
             header={"Age Restriction"}
@@ -57,9 +75,11 @@ class SplashScreen extends Component {
             buttons={["I understand"]}
           ></IonAlert>
         </IonItem>
+          </IonCol>
+        </IonRow>
       </IonPage>
-    );
-  }
-}
+    </IonGrid>
+  );
+};
 
 export default SplashScreen;
