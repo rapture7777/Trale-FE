@@ -12,22 +12,20 @@ import {
   IonProgressBar
 } from "@ionic/react";
 
-const UserProfile = () => {
+const UserProfile = props => {
+  const { avatar, username, bio } = props.user;
   return (
     <IonPage>
       <IonGrid className="userProfile">
         <IonRow>
           <IonCol>
             <IonAvatar>
-              <img
-                src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y"
-                alt="user avatar"
-              />
+              <img src={avatar} alt="user avatar" />
             </IonAvatar>
           </IonCol>
           <IonCol>
             <IonItem>
-              <IonLabel>username</IonLabel>
+              <IonLabel>{username}</IonLabel>
             </IonItem>
           </IonCol>
         </IonRow>
@@ -35,10 +33,7 @@ const UserProfile = () => {
         <IonRow>
           <IonItem>
             <ion-text>
-              <p>
-                This is where the user can enter their personal bio. What ales
-                they like festivals visited etc...
-              </p>
+              <p>{bio}</p>
             </ion-text>
           </IonItem>
         </IonRow>
