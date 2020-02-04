@@ -11,7 +11,7 @@ import '../css/Trails.css';
 
 const Trails = () => {
   return (
-    <IonPage className="page">
+    <IonPage className="Trails-page">
       <IonContent>
         <h3 className="Title">Trails</h3>
         <IonCard className="Trail-Card" button="true">
