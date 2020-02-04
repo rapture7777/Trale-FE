@@ -14,6 +14,7 @@ import {
 
 const UserProfile = props => {
   const { avatar, username, bio } = props.user;
+  const { selectedTrail } = props;
   return (
     <IonPage>
       <IonGrid className="userProfile">
@@ -45,7 +46,7 @@ const UserProfile = props => {
                 <IonLabel>In Progress Tralis</IonLabel>
               </IonListHeader>
               <IonItem>
-                <p>This trail "name of trail" is currently in progress..</p>
+                <p>{`The ${selectedTrail} is currently in progress..`}</p>
               </IonItem>
               <IonProgressBar value={0.5}></IonProgressBar>
             </IonList>
@@ -59,12 +60,12 @@ const UserProfile = props => {
                 <IonLabel>Completed Trails</IonLabel>
               </IonListHeader>
               <IonItem>
-                <p>"Username" has completed this trail</p>
+                <p>{`${username} has completed "trail name" `}</p>
               </IonItem>
               <IonProgressBar value={1}></IonProgressBar>
 
               <IonItem>
-                <p>"Username" has completed this trail</p>
+                <p>{`${username} has completed "trail name" `}</p>
               </IonItem>
               <IonProgressBar value={1}></IonProgressBar>
             </IonList>

@@ -22,6 +22,19 @@ class NavBar extends Component {
   };
 
   componentDidMount = () => {
+    this.fetchUserById();
+    this.fetchAllTrails();
+  };
+
+  fetchAllTrails = () => {
+    return axios
+      .get("https://tralebackend.herokuapp.com/api/routes")
+      .then(({ data: { routes } }) => {
+        this.setState({ selectedTrail: routes[0].route_name });
+      });
+  };
+
+  fetchUserById = () => {
     return axios
       .get("https://tralebackend.herokuapp.com/api/users/1")
       .then(({ data: { user } }) => {
@@ -38,7 +51,12 @@ class NavBar extends Component {
             <Route path="/components/Map" component={Map} exact={true} />
             <Route
               path="/components/UserProfile"
-              render={() => <UserProfile user={this.state.user} />}
+              render={() => (
+                <UserProfile
+                  user={this.state.user}
+                  selectedTrail={this.state.selectedTrail}
+                />
+              )}
               exact={true}
             />
           </IonRouterOutlet>
