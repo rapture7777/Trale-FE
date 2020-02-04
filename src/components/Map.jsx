@@ -5,7 +5,7 @@ import {
   GoogleMap,
   DirectionsRenderer
 } from 'react-google-maps';
-import { IonPage, IonContent } from '@ionic/react';
+import { IonContent, IonPage } from '@ionic/react';
 import '../css/Map.css';
 
 class Map extends Component {

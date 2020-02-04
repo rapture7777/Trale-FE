@@ -1,7 +1,4 @@
 .Map {
   height: 95vh;
-}
-
-.Map .Content {
-  height: 100%;
+  min-width: 100vw;
 }
