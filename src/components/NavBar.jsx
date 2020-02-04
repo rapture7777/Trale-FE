@@ -24,17 +24,11 @@ class NavBar extends Component {
     const MapLoader = withScriptjs(Map);
 
     return (
-      <IonReactRouter className="NavBar">
-        <IonTabs className="NavBar">
-          <IonRouterOutlet className="Content">
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/components/Trails" component={Trails} exact={true} />
             <Route
-              className="Trails"
-              path="/components/Trails"
-              component={Trails}
-              exact={true}
-            />
-            <Route
-              className="Content"
               path="/components/Map"
               render={() => (
                 <div>
@@ -52,7 +46,7 @@ class NavBar extends Component {
               exact={true}
             />
           </IonRouterOutlet>
-          <IonTabBar className="tab" slot="bottom">
+          <IonTabBar slot="bottom">
             <IonTabButton tab="trails" href="/components/Trails">
               <IonLabel>Trails</IonLabel>
             </IonTabButton>

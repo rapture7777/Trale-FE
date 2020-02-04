@@ -1,16 +1,25 @@
-/* .app {
+.app {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-} */
+  display: grid;
+  grid-template-columns: 100vw;
+  grid-template-rows: 90% 10%;
+  grid-template-areas:
+    'Content'
+    'Tabs';
+}
 
 .app .splashScreen {
   min-width: 100%;
   min-height: 100%;
 }
 
-/* .app div {
-  height: 80%;
-} */
+.app .div {
+  display: grid;
+  grid-area: Content;
+}
+
+.app .tab {
+  grid-area: Tabs;
+  max-height: 100%;
+  display: flex;
+}

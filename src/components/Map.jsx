@@ -53,7 +53,7 @@ class Map extends Component {
       <IonPage>
         <GoogleMapMain
           containerElement={<IonContent className="Map" />}
-          mapElement={<IonContent className="content" />}
+          mapElement={<IonContent className="Content" />}
         />
       </IonPage>
     );
