@@ -1,8 +1,7 @@
 import React from 'react';
 import './css/App.css';
-import splashScreen from './components/splashScreen.jsx';
+import SplashScreen from './components/splashScreen.jsx';
 import { IonApp } from '@ionic/react';
-import NavBar from './components/NavBar';
 import { Plugins } from '@capacitor/core';
 const { Geolocation } = Plugins;
 
@@ -19,8 +18,7 @@ class App extends React.Component {
   render() {
     return (
       <IonApp>
-        {/* <splashScreen /> */}
-        <NavBar />
+        <SplashScreen />
       </IonApp>
     );
   }
