@@ -3,19 +3,23 @@ import React, { Component } from 'react';
 import {
   withGoogleMap,
   GoogleMap,
-  DirectionsRenderer
+  DirectionsRenderer,
+  Marker
 } from 'react-google-maps';
 import { IonContent, IonPage } from '@ionic/react';
 import '../css/Map.css';
 
 class Map extends Component {
   state = {
-    directions: []
+    directions: [],
+    userLocation: {
+      lat: +localStorage.getItem('lat'),
+      lng: +localStorage.getItem('lng')
+    }
   };
 
   componentDidMount() {
     const directionsService = new google.maps.DirectionsService();
-
     const origin = { lat: 40.756795, lng: -73.954298 };
     const waypoints = [{ location: new google.maps.LatLng(41.3, -75.95429) }];
     const destination = { lat: 41.756795, lng: -78.954298 };
@@ -40,12 +44,11 @@ class Map extends Component {
   }
 
   render() {
-    const GoogleMapMain = withGoogleMap(props => (
-      <GoogleMap
-        defaultCenter={{ lat: 40.756795, lng: -73.954298 }}
-        defaultZoom={13}
-      >
-        <DirectionsRenderer directions={this.state.directions} />
+    const { userLocation } = this.state;
+    const GoogleMapMain = withGoogleMap(() => (
+      <GoogleMap defaultCenter={userLocation} defaultZoom={13}>
+        {/* <DirectionsRenderer directions={this.state.directions} /> */}
+        <Marker position={userLocation} />
       </GoogleMap>
     ));
 
