@@ -1,20 +1,22 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   IonRouterOutlet,
   IonTabBar,
   IonTabs,
   IonTabButton,
-  IonLabel
+  IonLabel,
+  IonContent
 } from '@ionic/react';
 import { Route } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
 import Trails from './Trails';
 import Map from './Map';
-import UserProfile from "./UserProfile";
+import UserProfile from './UserProfile';
 import '../css/NavBar.css';
+import '../css/Map.css';
 import { withScriptjs } from 'react-google-maps';
 import apiKey from '../apiKey';
-import axios from "axios";
+import axios from 'axios';
 
 class NavBar extends Component {
   state = {
@@ -30,7 +32,7 @@ class NavBar extends Component {
 
   fetchAllTrails = () => {
     return axios
-      .get("https://tralebackend.herokuapp.com/api/routes")
+      .get('https://tralebackend.herokuapp.com/api/routes')
       .then(({ data: { routes } }) => {
         this.setState({ selectedTrail: routes[0].route_name });
       });
@@ -38,7 +40,7 @@ class NavBar extends Component {
 
   fetchUserById = () => {
     return axios
-      .get("https://tralebackend.herokuapp.com/api/users/1")
+      .get('https://tralebackend.herokuapp.com/api/users/1')
       .then(({ data: { user } }) => {
         this.setState({ user });
       });
@@ -55,12 +57,10 @@ class NavBar extends Component {
             <Route
               path="/components/Map"
               render={() => (
-                <div>
-                  <MapLoader
-                    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
-                    loadingElement={<div style={{ height: `100%` }} />}
-                  />
-                </div>
+                <MapLoader
+                  googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
+                  loadingElement={<IonContent className="Map" />}
+                />
               )}
               exact={true}
             />
