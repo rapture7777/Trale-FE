@@ -6,7 +6,7 @@ import {
   DirectionsRenderer,
   Marker
 } from 'react-google-maps';
-import { IonContent, IonPage, IonBackdrop } from '@ionic/react';
+import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import '../css/Map.css';
 
 class Map extends Component {
@@ -16,30 +16,31 @@ class Map extends Component {
     userLocation: {
       lat: +localStorage.getItem('lat'),
       lng: +localStorage.getItem('lng')
-    }
+    },
+    loading: this.props.loading
   };
 
   componentDidMount() {
     const directionsService = new google.maps.DirectionsService();
     const origin = { lat: 40.756795, lng: -73.954298 };
-    // const waypoints = [{ location: new google.maps.LatLng(41.3, -75.95429) }];
+    const waypoints = [{ location: { lat: 41.3, lng: -75.95429 } }];
     const destination = { lat: 41.756795, lng: -78.954298 };
-
-    // google.maps.event.trigger(maps, 'resize');
 
     directionsService.route(
       {
         origin: origin,
         destination: destination,
-        travelMode: google.maps.TravelMode.WALKING
-        // waypoints: waypoints
+        travelMode: google.maps.TravelMode.WALKING,
+        waypoints: waypoints
       },
       (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
           this.setState({
+            loading: false,
             origin: origin,
             directions: result
           });
+          this.forceUpdate();
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -48,19 +49,37 @@ class Map extends Component {
   }
 
   render() {
-    const { userLocation } = this.state;
+    const { userLocation, directions, loading } = this.state;
     const GoogleMapMain = withGoogleMap(() => (
-      <GoogleMap center={userLocation} defaultZoom={10}>
-        <DirectionsRenderer directions={this.state.directions} />
+      <GoogleMap
+        onIdle={() => {
+          google.maps.event.trigger(GoogleMap, 'resize');
+          console.log('resize');
+        }}
+        defaultCenter={directions.origin}
+        zoom={8}
+      >
+        <DirectionsRenderer directions={directions} />
         <Marker position={userLocation} />
       </GoogleMap>
     ));
 
-    return (
-      <IonPage className="Map-page">
+    return loading ? (
+      <IonPage className="Loading-Page">
+        <IonSpinner className="Loading-Spinner" name="lines" />
+      </IonPage>
+    ) : (
+      <IonPage className="Map-page" style={{ visibility: 'visible' }}>
         <GoogleMapMain
-          containerElement={<IonContent className="Map" />}
-          mapElement={<IonContent className="Map-Content" />}
+          containerElement={
+            <IonContent className="Map" style={{ visibility: 'visible' }} />
+          }
+          mapElement={
+            <IonContent
+              className="Map-Content"
+              style={{ visibility: 'visible' }}
+            />
+          }
         />
       </IonPage>
     );
