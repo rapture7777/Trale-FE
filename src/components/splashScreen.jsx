@@ -13,7 +13,7 @@ import {
   IonAlert
 } from '@ionic/react';
 import '../css/splashScreen.css';
-import { ageValidation } from '../utils';
+import * as utils from '../utils';
 
 class SplashScreen extends Component {
   state = { userVerified: 1 };
@@ -21,7 +21,7 @@ class SplashScreen extends Component {
   handleDateChange = event => {
     const { value } = event.detail;
     if (value) {
-      const validAge = ageValidation(value);
+      const validAge = utils.ageValidation(value);
       this.setState({ userVerified: validAge });
     }
   };

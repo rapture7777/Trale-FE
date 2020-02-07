@@ -20,67 +20,62 @@ class Map extends Component {
     directions: [],
     trailPubs: [],
     trailId: undefined,
-    type: undefined
+    type: undefined,
+    transitMarkers: []
   };
 
   //going to get an id from the button which was clicked on on trail list
   updateTrailPubs(id) {
     //change to take id when trail list buttons work, for now set manually
     return axios
-      .get(`https://tralebackend.herokuapp.com/api/routes/1`)
+      .get(`https://tralebackend.herokuapp.com/api/routes/${id}`)
       .then(response => {
-        console.log(response.data.route, 'response data route after api call');
-        //set state to type that we receive from backend once this is implemented, set manually for now
+        //set state to type that we receive from backend once this is implemented
         this.setState({
-          trailId: 1,
           trailPubs: response.data.route,
-          type: 'WALKING'
+          type: 'WALKING',
+          trailId: id
         });
       });
     // ^ setting state with the pubs for one trail
   }
 
+  getLatLng(addressString) {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: addressString }, (results, status) => {
+      if (status === 'OK') {
+        this.setState(currentState => {
+          return {
+            transitMarkers: [
+              ...currentState.transitMarkers,
+              results[0].geometry.location
+            ]
+          };
+        });
+      } else console.error(`error fetching directions ${results}`);
+      // probably best to do something if it cant recognise the pub name, implement
+    });
+  }
+
   updateDirectionsAndMap() {
     const directionsService = new google.maps.DirectionsService();
 
-    const origin = {
-      // lat: this.state.trailPubs[0].lat,
-      // lng: this.state.trailPubs[0].lat
-    };
-    // origin will be geolocation received from GPS
-
-    const destination = {
-      // lat: this.state.trailPubs[trailPubs.length - 1].lat,
-      // lng: this.state.trailPubs[trailPubs.length -1].lng
-    };
-
+    let origin = '';
+    let destination = '';
     const waypoints = [];
 
     this.state.trailPubs.forEach((pub, index) => {
-      // let thisPub = new google.maps.LatLng(pub.lat, pub.lng);
       if (index === 0) {
-        origin.lat = this.state.trailPubs[0].lat;
-        origin.lng = this.state.trailPubs[0].lng;
+        origin = pub.pub_name;
       } else if (index === this.state.trailPubs.length - 1) {
-        destination.lat = this.state.trailPubs[
-          this.state.trailPubs.length - 1
-        ].lat;
-        destination.lng = this.state.trailPubs[
-          this.state.trailPubs.length - 1
-        ].lng;
-      } else {
-        if (this.state.type === 'WALKING') {
-          waypoints.push({
-            location: new google.maps.LatLng(pub.lat, pub.lng)
-          });
-        }
-        //if transit, take out waypoints from directions renderer, put them in markers
+        destination = pub.pub_name;
+      } else if (this.state.type === 'WALKING') {
+        waypoints.push({ location: pub.pub_name });
+      } else if (this.state.type === 'TRANSIT') {
+        this.getLatLng(pub.pub_name);
       }
-      console.log(origin, 'origin');
-      console.log(waypoints, 'waypoints');
-      console.log(destination, 'destination');
+      //if we implement transit, then we can change as necessary
     });
-    // attempting to push a location object for each pub in state to
 
     directionsService.route(
       {
@@ -90,7 +85,6 @@ class Map extends Component {
         waypoints: waypoints
       },
       (result, status) => {
-        console.log(result, status, 'result and status');
         if (status === google.maps.DirectionsStatus.OK) {
           this.setState({
             directions: result
@@ -103,26 +97,31 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    if (this.state.trailId !== 1) {
-      this.updateTrailPubs(this.state.trailId).then(() => {
+    if (this.state.trailId !== this.props.routeId) {
+      this.updateTrailPubs(this.props.routeId).then(() => {
         this.updateDirectionsAndMap();
       });
     }
   }
 
   render() {
-    const GoogleMapMain = withGoogleMap(props => (
-      <GoogleMap
-        defaultCenter={{ lat: 53.4844482, lng: -2.064649 }}
-        defaultZoom={13}
-      >
-        <DirectionsRenderer directions={this.state.directions} />
+    let defaultCenter = {
+      lat: 53.4844482,
+      lng: -2.064649
+    };
+    // put user's geolocation in here when we have it
+
+    const GoogleMapMain = withGoogleMap(() => (
+      <GoogleMap defaultCenter={defaultCenter} defaultZoom={13}>
+        <DirectionsRenderer
+          directions={this.state.directions}
+          // options={{ markerOptions: { label: 'Stalybridge buffet bar' } }}
+          // can style the markers as above
+        />
         {this.state.type === 'TRANSIT' && (
           <>
-            {this.state.trailPubs.map((pub, index) => {
-              if (index !== 0 && index !== this.state.trailPubs.length - 1) {
-                return <Marker position={{ lat: pub.lat, lng: pub.lng }} />;
-              }
+            {this.state.transitMarkers.map(LatLng => {
+              return <Marker position={LatLng} />;
             })}
           </>
         )}
