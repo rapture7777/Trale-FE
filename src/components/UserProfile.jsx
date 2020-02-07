@@ -11,12 +11,14 @@ import {
   IonList,
   IonProgressBar
 } from "@ionic/react";
+import { Authenticator } from "aws-amplify-react";
 
 const UserProfile = props => {
   const { avatar, username, bio } = props.user;
   const { selectedTrail } = props;
   return (
     <IonPage>
+      <Authenticator authState="signIn" />
       <IonGrid className="userProfile">
         <IonRow>
           <IonCol>
