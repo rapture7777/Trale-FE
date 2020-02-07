@@ -14,6 +14,7 @@ import {
 } from '@ionic/react';
 import '../css/splashScreen.css';
 import * as utils from '../utils';
+import NavBar from './NavBar';
 
 class SplashScreen extends Component {
   state = { userVerified: 1 };
@@ -27,7 +28,12 @@ class SplashScreen extends Component {
   };
 
   render() {
-    return (
+    const { userVerified } = this.state;
+    return userVerified === true ? (
+      <IonPage>
+        <NavBar />
+      </IonPage>
+    ) : (
       <IonGrid>
         <IonPage>
           <IonRow align-self-center>
@@ -38,12 +44,12 @@ class SplashScreen extends Component {
           <IonRow align-self-center>
             <IonCol className="DateBox">
               <IonItem>
-                <IonLabel>DD-MM-YY</IonLabel>
+                <IonLabel> Please enter your date of birth</IonLabel>
                 <IonDatetime
                   value={''}
                   onIonChange={event => this.handleDateChange(event)}
                   displayFormat="DD-MM-YY"
-                  placeholder="Date of birth"
+                  placeholder="here"
                 ></IonDatetime>
               </IonItem>
             </IonCol>
