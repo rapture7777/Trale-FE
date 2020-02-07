@@ -18,11 +18,16 @@ import apiKey from '../apiKey';
 class NavBar extends Component {
   state = {
     trailList: [],
-    selectedTrail: NaN
+    selectedTrail: NaN,
+    routeId: null
   };
+
+  getRouteId = routeId => {
+    this.setState({ routeId: routeId }, () => {});
+  };
+
   render() {
-    const MapLoader = withScriptjs(Map);
-    console.log(this.props.routeId, 'route id');
+    const MapLoader = withScriptjs(() => <Map routeId={this.state.routeId} />);
 
     return (
       <IonReactRouter>
@@ -31,11 +36,11 @@ class NavBar extends Component {
             <Switch>
               <Route
                 path="/components/Trails"
-                component={Trails}
+                render={() => <Trails getRouteId={this.getRouteId} />}
                 exact={true}
               />
               <Route
-                path="/components/Map"
+                path="/components/Map/:routeId"
                 render={() => (
                   <MapLoader
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}

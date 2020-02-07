@@ -20,32 +20,32 @@ class Trails extends Component {
   componentDidMount() {
     if (!this.state.trails.length) {
       utils.getTrails().then(routes => {
-        console.log(routes);
         this.setState({ trails: [...routes] });
-        console.log(this.state.trails, "state's routes");
       });
     }
   }
 
   render() {
+    const { getRouteId } = this.props;
     return (
       <IonPage className="Trails-page">
         <IonContent>
           <h3 className="Title">Trails</h3>
           {this.state.trails.length &&
             this.state.trails.map(route => {
-              console.log(route.id, 'route id in map');
               return (
                 <Link
                   to={{
-                    pathname: `/components/Map/${route.id}`,
-                    routeId: route.id
+                    pathname: `/components/Map/${route.id}`
                   }}
                 >
                   <IonCard
                     className="Trail-Card"
                     button="true"
                     trailId={route.id}
+                    onClick={() => {
+                      getRouteId(route.id);
+                    }}
                   >
                     <IonCardHeader>
                       <IonCardTitle>{route.route_name}</IonCardTitle>
