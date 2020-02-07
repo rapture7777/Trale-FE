@@ -4,56 +4,103 @@ import {
   IonTabBar,
   IonTabs,
   IonTabButton,
-  IonLabel
+  IonLabel,
+  IonContent
 } from '@ionic/react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
 import Trails from './Trails';
 import Map from './Map';
-import Profile from './Profile';
+import UserProfile from './UserProfile';
 import '../css/NavBar.css';
+import '../css/Map.css';
 import { withScriptjs } from 'react-google-maps';
 import apiKey from '../apiKey';
+import axios from 'axios';
 
 class NavBar extends Component {
   state = {
     trailList: [],
-    selectedTrail: NaN
+    selectedTrail: NaN,
+    routeId: null,
+    user: {}
   };
-  render() {
-    const MapLoader = withScriptjs(Map);
+
+    getRouteId = routeId => {
+    this.setState({ routeId: routeId }, () => {});
+  };
+  componentDidMount = () => {
+    this.fetchUserById();
+    this.fetchAllTrails();
+  };
+
+  fetchAllTrails = () => {
+    return axios
+      .get('https://tralebackend.herokuapp.com/api/routes')
+      .then(({ data: { routes } }) => {
+        this.setState({ selectedTrail: routes[0].route_name });
+      });
+  };
+
+  fetchUserById = () => {
+    return axios
+      .get('https://tralebackend.herokuapp.com/api/users/1')
+      .then(({ data: { user } }) => {
+        this.setState({ user });
+      });
+  };
+
+   render() {
+  const MapLoader = withScriptjs(() => <Map routeId={this.state.routeId} />);
 
     return (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/components/Trails" component={Trails} exact={true} />
-            <Route
-              path="/components/Map"
-              render={() => (
-                <div>
+            <Switch>
+              <Route
+                path="/"
+                render={() => <Trails getRouteId={this.getRouteId} />}
+                exact={true}
+              />
+              <Route
+                path="/components/Map/:routeId"
+                render={() => (
                   <MapLoader
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
-                    loadingElement={<div style={{ height: `100%` }} />}
+                    routeId={this.props.routeId}
+                    loadingElement={<IonContent className="Map-page" />}
+                    loading={true}
                   />
-                </div>
+                )}
+              />
+              <Route
+              path="/components/UserProfile"
+              render={() => (
+                <UserProfile
+                  user={this.state.user}
+                  selectedTrail={this.state.selectedTrail}
+                />
               )}
               exact={true}
             />
-            <Route
-              path="/components/Profile"
-              component={Profile}
-              exact={true}
-            />
+            </Switch>
+
+
           </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="trails" href="/components/Trails">
-              <IonLabel>Trails</IonLabel>
+          <IonTabBar slot="bottom" translucent="true" className="Tabs">
+            <IonTabButton tab="trails" href="/">
+              <IonLabel>
+                <b>Trails</b>
+              </IonLabel>
             </IonTabButton>
             <IonTabButton tab="map" href="/components/Map">
-              <IonLabel>Map</IonLabel>
+              <IonLabel>
+                <b>Map</b>
+              </IonLabel>
             </IonTabButton>
-            <IonTabButton tab="profile" href="/components/Profile">
+
+            <IonTabButton tab="profile" href="/components/UserProfile">
               <IonLabel>Profile</IonLabel>
             </IonTabButton>
           </IonTabBar>

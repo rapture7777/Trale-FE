@@ -1,4 +1,29 @@
-button {
-  justify-self: center;
-  align-self: center;
+.Title {
+  text-align: center;
+  padding-bottom: 0;
+}
+
+.Title h3 {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.Trails-page {
+  height: 100vh;
+}
+
+.Trails-Content {
+  height: 100%;
+  position: absolute;
+}
+
+.Trail-Card {
+  background-image: linear-gradient(
+    to top,
+    #c0cfe9,
+    #cdd5e9,
+    #d8dbe9,
+    #e2e2e9,
+    #e9e9e9
+  ) !important;
 }
