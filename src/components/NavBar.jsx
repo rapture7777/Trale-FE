@@ -7,7 +7,7 @@ import {
   IonLabel,
   IonContent
 } from '@ionic/react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
 import Trails from './Trails';
 import Map from './Map';
@@ -22,10 +22,13 @@ class NavBar extends Component {
   state = {
     trailList: [],
     selectedTrail: NaN,
-    user: {},
-    MapLoader: withScriptjs(Map)
+    routeId: null,
+    user: {}
   };
 
+    getRouteId = routeId => {
+    this.setState({ routeId: routeId }, () => {});
+  };
   componentDidMount = () => {
     this.fetchUserById();
     this.fetchAllTrails();
@@ -47,26 +50,31 @@ class NavBar extends Component {
       });
   };
 
-  render() {
-    const { MapLoader } = this.state;
+   render() {
+  const MapLoader = withScriptjs(() => <Map routeId={this.state.routeId} />);
 
     return (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/" component={Trails} exact={true} />
-            <Route
-              path="/components/Map"
-              render={() => (
-                <MapLoader
-                  googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
-                  loadingElement={<IonContent className="Map-page" />}
-                  loading={true}
-                />
-              )}
-              exact={true}
-            />
-            <Route
+            <Switch>
+              <Route
+                path="/"
+                render={() => <Trails getRouteId={this.getRouteId} />}
+                exact={true}
+              />
+              <Route
+                path="/components/Map/:routeId"
+                render={() => (
+                  <MapLoader
+                    googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
+                    routeId={this.props.routeId}
+                    loadingElement={<IonContent className="Map-page" />}
+                    loading={true}
+                  />
+                )}
+              />
+              <Route
               path="/components/UserProfile"
               render={() => (
                 <UserProfile
@@ -76,6 +84,9 @@ class NavBar extends Component {
               )}
               exact={true}
             />
+            </Switch>
+
+
           </IonRouterOutlet>
           <IonTabBar slot="bottom" translucent="true" className="Tabs">
             <IonTabButton tab="trails" href="/">
