@@ -22,7 +22,8 @@ class NavBar extends Component {
   state = {
     trailList: [],
     selectedTrail: NaN,
-    user: {}
+    user: {},
+    MapLoader: withScriptjs(Map)
   };
 
   componentDidMount = () => {
@@ -47,19 +48,20 @@ class NavBar extends Component {
   };
 
   render() {
-    const MapLoader = withScriptjs(Map);
+    const { MapLoader } = this.state;
 
     return (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/components/Trails" component={Trails} exact={true} />
+            <Route path="/" component={Trails} exact={true} />
             <Route
               path="/components/Map"
               render={() => (
                 <MapLoader
                   googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
-                  loadingElement={<IonContent className="Map" />}
+                  loadingElement={<IonContent className="Map-page" />}
+                  loading={true}
                 />
               )}
               exact={true}
@@ -76,7 +78,7 @@ class NavBar extends Component {
             />
           </IonRouterOutlet>
           <IonTabBar slot="bottom" translucent="true" className="Tabs">
-            <IonTabButton tab="trails" href="/components/Trails">
+            <IonTabButton tab="trails" href="/">
               <IonLabel>
                 <b>Trails</b>
               </IonLabel>
