@@ -6,7 +6,7 @@ import {
   IonTabButton,
   IonLabel
 } from '@ionic/react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { IonReactRouter } from '@ionic/react-router';
 import Trails from './Trails';
 import Map from './Map';
@@ -22,29 +22,34 @@ class NavBar extends Component {
   };
   render() {
     const MapLoader = withScriptjs(Map);
+    console.log(this.props.routeId, 'route id');
 
     return (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/components/Trails" component={Trails} exact={true} />
-            <Route
-              path="/components/Map"
-              render={() => (
-                <div>
+            <Switch>
+              <Route
+                path="/components/Trails"
+                component={Trails}
+                exact={true}
+              />
+              <Route
+                path="/components/Map"
+                render={() => (
                   <MapLoader
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
                     loadingElement={<div style={{ height: `100%` }} />}
+                    routeId={this.props.routeId}
                   />
-                </div>
-              )}
-              exact={true}
-            />
-            <Route
-              path="/components/Profile"
-              component={Profile}
-              exact={true}
-            />
+                )}
+              />
+              <Route
+                path="/components/Profile"
+                component={Profile}
+                exact={true}
+              />
+            </Switch>
           </IonRouterOutlet>
           <IonTabBar slot="bottom" translucent="true">
             <IonTabButton tab="trails" href="/components/Trails">

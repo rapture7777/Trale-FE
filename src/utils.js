@@ -1,4 +1,6 @@
-export const ageValidation = value => {
+const axios = require('axios');
+
+const ageValidation = value => {
   let dateNow = new Date(value).toISOString();
   let inputInMilliseconds = Date.parse(dateNow);
   const eighteenYearsInMilliseconds = 567993600000;
@@ -8,3 +10,13 @@ export const ageValidation = value => {
   if (eighteenYearsAgo > inputInMilliseconds) return true;
   else return false;
 };
+
+const getTrails = () => {
+  return axios
+    .get('https://tralebackend.herokuapp.com/api/routes')
+    .then(response => {
+      return response.data.routes;
+    });
+};
+
+module.exports = { ageValidation, getTrails };
