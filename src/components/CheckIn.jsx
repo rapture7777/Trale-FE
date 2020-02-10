@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { IonPage, IonTitle, IonButton } from "@ionic/react";
 import { Geolocation } from "@capacitor/core";
+import NoticeMsg from "./NoticeMsg";
 import { getReq } from "../utils/api";
 
 class CheckIn extends Component {
@@ -10,7 +11,9 @@ class CheckIn extends Component {
     nextDestination: {},
     allDestinations: {},
     sSet: 0,
-    distance: null
+    distance: null,
+    noticeMsg: "",
+    noticeMsgDisplayed: false
   };
 
   getCurrentLocation = () => {
@@ -68,10 +71,16 @@ class CheckIn extends Component {
         user_id: 1,
         routes_id: 2
       }).then(res => {
-        console.log(res.data, "<<<<<<<");
+        this.setState({
+          noticeMsg: "You have been checked-in",
+          noticeMsgDisplayed: true
+        });
       });
     } else {
-      // show message that the user is too far from the pub
+      this.setState({
+        noticeMsg: "You are so far from the pub!",
+        noticeMsgDisplayed: true
+      });
     }
   };
 
@@ -87,6 +96,7 @@ class CheckIn extends Component {
   }
 
   render() {
+    const { noticeMsg, noticeMsgDisplayed } = this.state;
     return (
       <IonPage>
         <IonTitle>Location Tracking</IonTitle>
@@ -97,6 +107,14 @@ class CheckIn extends Component {
         >
           Check-in
         </IonButton>
+        {noticeMsg && (
+          <NoticeMsg
+            msg={noticeMsg}
+            header={"Checking-in"}
+            button={"Okay!"}
+            isDisplayed={noticeMsgDisplayed}
+          />
+        )}
       </IonPage>
     );
   }
