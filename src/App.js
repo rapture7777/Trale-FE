@@ -5,11 +5,8 @@ import { IonApp, IonPage } from "@ionic/react";
 import NavBar from "./components/NavBar";
 import Amplify from "aws-amplify";
 import awsmobile from "./aws-exports";
-
-//import { Auth } from "aws-amplify";
 import { withAuthenticator } from "aws-amplify-react";
-//import { CognitoUser } from "@aws-amplify/auth";
-//import { CognitoUser } from "aws-amplify-react/dist/Auth";
+import axios from "axios";
 
 Amplify.configure(awsmobile);
 
@@ -18,7 +15,23 @@ class App extends Component {
     username: null
   };
 
+  componentDidMount = () => {
+    this.fetchUserByUsername();
+  };
+
+  fetchUserByUsername = () => {
+    const { username } = this.props.authData;
+    return axios
+      .get(`https://tralebackend.herokuapp.com/api/users/${username}`)
+      .then(data => {
+        console.log(data);
+        //set the state with valid usename
+      });
+  };
+
   render() {
+    console.log(this.props.authData.username);
+
     return (
       <IonApp>
         {/* <SplashScreen /> */}
