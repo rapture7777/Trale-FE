@@ -9,7 +9,8 @@ import {
   IonPage,
   IonListHeader,
   IonList,
-  IonProgressBar
+  IonProgressBar,
+  IonCard
 } from "@ionic/react";
 import { Authenticator } from "aws-amplify-react";
 
@@ -43,21 +44,23 @@ const UserProfile = props => {
 
         <IonRow>
           <IonCol>
-            <IonList>
-              <IonListHeader>
-                <IonLabel>In Progress Tralis</IonLabel>
-              </IonListHeader>
-              <IonItem>
-                <p>{`The ${selectedTrail} is currently in progress..`}</p>
-              </IonItem>
-              <IonProgressBar value={0.5}></IonProgressBar>
-            </IonList>
+            <IonCard>
+              <IonList>
+                <IonListHeader>
+                  <IonLabel>In Progress Tralis</IonLabel>
+                </IonListHeader>
+                <IonItem>
+                  <p>{`The ${selectedTrail} is currently in progress..`}</p>
+                </IonItem>
+                <IonProgressBar value={0.5}></IonProgressBar>
+              </IonList>
+            </IonCard>
           </IonCol>
         </IonRow>
 
         <IonRow>
           <IonCol>
-            <IonList>
+            <IonCard>
               <IonListHeader>
                 <IonLabel>Completed Trails</IonLabel>
               </IonListHeader>
@@ -65,12 +68,14 @@ const UserProfile = props => {
                 <p>{`${username} has completed "trail name" `}</p>
               </IonItem>
               <IonProgressBar value={1}></IonProgressBar>
+            </IonCard>
 
+            <IonCard>
               <IonItem>
                 <p>{`${username} has completed "trail name" `}</p>
               </IonItem>
               <IonProgressBar value={1}></IonProgressBar>
-            </IonList>
+            </IonCard>
           </IonCol>
         </IonRow>
       </IonGrid>

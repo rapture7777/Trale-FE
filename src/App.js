@@ -22,8 +22,7 @@ class App extends Component {
   render() {
     return (
       <IonApp>
-        {console.log(this.props)}
-        <SplashScreen />
+        {/* <SplashScreen /> */}
         <NavBar />
       </IonApp>
     );
