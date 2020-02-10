@@ -20,6 +20,7 @@ const UserProfile = props => {
   return (
     <IonPage>
       <Authenticator authState="signIn" />
+
       <IonGrid className="userProfile">
         <IonRow>
           <IonCol>
