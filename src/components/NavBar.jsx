@@ -52,7 +52,6 @@ class NavBar extends Component {
 
   render() {
     const MapLoader = withScriptjs(() => <Map routeId={this.state.routeId} />);
-
     return (
       <IonReactRouter>
         <IonTabs>
