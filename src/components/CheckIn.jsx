@@ -15,7 +15,6 @@ class CheckIn extends Component {
 
   getCurrentLocation = () => {
     console.log("getting current location");
-
     Geolocation.watchPosition({}, (position, err) => {
       if (position) this.setState({ position: position.coords });
       if (err) console.log(err);
@@ -27,7 +26,7 @@ class CheckIn extends Component {
 
   getRoute = () => {
     console.log("getting route");
-    getReq(`https://tralebackend.herokuapp.com/api/routes/1`).then(
+    getReq(`https://tralebackend.herokuapp.com/api/routes/2`).then(
       ({ route }) => {
         this.setState(currentState => {
           return {
@@ -64,15 +63,21 @@ class CheckIn extends Component {
 
   handleCheckInButton = () => {
     const { distance } = this.state;
-    if (distance >= 1000) {
-      // make patch request with {user_id, trail_id}
+    if (distance <= 1000) {
+      getReq("https://tralebackend.herokuapp.com/api/user_routes", {
+        user_id: 1,
+        routes_id: 2
+      }).then(res => {
+        console.log(res.data, "<<<<<<<");
+      });
     } else {
       // show message that the user is too far from the pub
     }
   };
 
   componentDidMount() {
-    return Promise.all([this.getRoute(), this.getCurrentLocation()]);
+    this.getRoute();
+    this.getCurrentLocation();
   }
 
   componentDidUpdate(prevProps, prevState) {

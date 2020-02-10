@@ -5,15 +5,15 @@ import {
   IonTabs,
   IonTabButton,
   IonLabel
-} from '@ionic/react';
-import { Route } from 'react-router-dom';
-import { IonReactRouter } from '@ionic/react-router';
-import Trails from './Trails';
-import Map from './Map';
+} from "@ionic/react";
+import { Route } from "react-router-dom";
+import { IonReactRouter } from "@ionic/react-router";
+import Trails from "./Trails";
+import Map from "./Map";
 import UserProfile from "./UserProfile";
-import '../css/NavBar.css';
-import { withScriptjs } from 'react-google-maps';
-import apiKey from '../apiKey';
+import "../css/NavBar.css";
+import { withScriptjs } from "react-google-maps";
+import apiKey from "../apiKey";
 import axios from "axios";
 
 class NavBar extends Component {
@@ -46,7 +46,6 @@ class NavBar extends Component {
 
   render() {
     const MapLoader = withScriptjs(Map);
-
     return (
       <IonReactRouter>
         <IonTabs>
