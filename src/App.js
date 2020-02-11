@@ -16,21 +16,21 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    this.fetchUserByUsername();
+    const { username } = this.props.authData;
+    this.fetchUserByUsername(username);
   };
 
-  fetchUserByUsername = () => {
-    const { username } = this.props.authData;
+  fetchUserByUsername = ({ username }) => {
     return axios
-      .get(`https://tralebackend.herokuapp.com/api/users/${username}`)
+      .get(`https://tralebackend.herokuapp.com/api/users?=${username}`)
       .then(data => {
         console.log(data);
-        //set the state with valid usename
-        //this.setState({ username });
+        this.setState({ username });
       });
   };
 
   render() {
+    console.log(this.state.username);
     return (
       <IonApp>
         {/* <SplashScreen /> */}

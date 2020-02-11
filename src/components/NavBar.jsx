@@ -35,6 +35,10 @@ class NavBar extends Component {
       });
   };
 
+  // patchCurrentTrail = () => {
+  //   return axios.patch(`${}`).then
+  // }
+
   // fetchUserById = () => {
   //   return axios
   //     .get("https://tralebackend.herokuapp.com/api/users/1")
