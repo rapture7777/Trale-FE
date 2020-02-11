@@ -22,15 +22,14 @@ class NavBar extends Component {
   state = {
     trailList: [],
     selectedTrail: NaN,
-    routeId: null,
-    user: {}
+    routeId: null
   };
 
   getRouteId = routeId => {
     this.setState({ routeId: routeId }, () => {});
   };
   componentDidMount = () => {
-    this.fetchUserById();
+    //this.fetchUserById();
     this.fetchAllTrails();
   };
 
@@ -42,6 +41,8 @@ class NavBar extends Component {
       });
   };
 
+  render() {
+  const MapLoader = withScriptjs(Map);
   fetchUserById = () => {
     return axios
       .get('https://tralebackend.herokuapp.com/api/users/1')
@@ -75,16 +76,13 @@ class NavBar extends Component {
                 )}
                 exact={true}
               />
-              <Route
-                path="/components/UserProfile"
-                render={() => (
-                  <UserProfile
-                    user={this.state.user}
-                    selectedTrail={this.state.selectedTrail}
-                  />
-                )}
-                exact={true}
-              />
+            <Route
+              path="/components/UserProfile"
+              render={() => (
+                <UserProfile
+                  username={this.props.username}
+                  selectedTrail={this.state.selectedTrail}
+                />
             </Switch>
           </IonRouterOutlet>
           <IonTabBar slot="bottom" translucent="true" className="Tabs">
