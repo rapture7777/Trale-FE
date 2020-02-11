@@ -10,12 +10,6 @@ import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import axios from 'axios';
 import '../css/Map.css';
 import { Plugins } from '@capacitor/core';
-const { Geolocation } = Plugins;
-
-// hardcoded example location objects
-// const origin = { lat: 40.756795, lng: -73.954298 };
-// const waypoints = [{ location: new google.maps.LatLng(41.3, -75.95429) }];
-// const destination = { lat: 41.756795, lng: -78.954298 };
 
 class Map extends Component {
   state = {
@@ -32,20 +26,16 @@ class Map extends Component {
     loading: this.props.loading
   };
 
-  //going to get an id from the button which was clicked on on trail list
   updateTrailPubs(id) {
-    //change to take id when trail list buttons work, for now set manually
     return axios
       .get(`https://tralebackend.herokuapp.com/api/routes/${id}`)
       .then(response => {
-        //set state to type that we receive from backend once this is implemented
         this.setState({
           trailPubs: response.data.route,
           type: 'WALKING',
           trailId: id
         });
       });
-    // ^ setting state with the pubs for one trail
   }
 
   getLatLng(addressString) {
@@ -61,17 +51,14 @@ class Map extends Component {
           };
         });
       } else console.error(`error fetching directions ${results}`);
-      // probably best to do something if it cant recognise the pub name, implement
     });
   }
 
   updateDirectionsAndMap() {
     const directionsService = new google.maps.DirectionsService();
-
     let origin = '';
     let destination = '';
     const waypoints = [];
-
     this.state.trailPubs.forEach((pub, index) => {
       if (index === 0) {
         origin = pub.pub_name;
@@ -82,7 +69,6 @@ class Map extends Component {
       } else if (this.state.type === 'TRANSIT') {
         this.getLatLng(pub.pub_name);
       }
-      //if we implement transit, then we can change as necessary
     });
 
     directionsService.route(
@@ -107,7 +93,8 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    Geolocation.watchPosition({}, (position, err) => {
+    const { Geolocation } = Plugins;
+    Geolocation.getCurrentPosition({}, (position, err) => {
       if (!err) {
         this.setState({
           userLocation: {
@@ -132,27 +119,12 @@ class Map extends Component {
   render() {
     const { userLocation, directions, loading } = this.state;
     const { routeId } = this.props;
-    let defaultCenter = new google.maps.LatLng(
-      userLocation.lat,
-      userLocation.lng
-    );
-    // put user's geolocation in here when we have it
+    let defaultCenter = new google.maps.LatLng(51.4466, -1.476454);
 
     const GoogleMapMain = withGoogleMap(() => (
       <GoogleMap defaultCenter={defaultCenter} defaultZoom={13}>
-        <DirectionsRenderer
-          directions={directions}
-          // options={{ markerOptions: { label: 'Stalybridge buffet bar' } }}
-          // can style the markers as above
-        />
-        <Marker position={userLocation} />
-        {this.state.type === 'TRANSIT' && (
-          <>
-            {this.state.transitMarkers.map(LatLng => {
-              return <Marker position={LatLng} />;
-            })}
-          </>
-        )}
+        <DirectionsRenderer directions={directions} />
+        <Marker position={defaultCenter} />
       </GoogleMap>
     ));
 
