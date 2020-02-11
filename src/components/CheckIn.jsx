@@ -1,46 +1,55 @@
 /*global google*/
-import React, { Component } from "react";
-import { IonPage, IonTitle, IonButton } from "@ionic/react";
-import { Geolocation } from "@capacitor/core";
-import { getReq } from "../utils/api";
+import React, { Component } from 'react';
+import { IonPage, IonTitle, IonButton } from '@ionic/react';
+import { Geolocation } from '@capacitor/core';
+import NoticeMsg from './NoticeMsg';
+import { getReq } from '../utils/api';
+import '../css/CheckIn.css';
 
 class CheckIn extends Component {
   state = {
     position: {},
     nextDestination: {},
     allDestinations: {},
-    sSet: 0,
-    distance: null
+    gotRoute: false,
+    gotCurrentLocation: false,
+    distance: null,
+    noticeMsg: '',
+    noticeMsgDisplayed: false
   };
 
   getCurrentLocation = () => {
-    console.log("getting current location");
+    console.log('getting current location');
     Geolocation.watchPosition({}, (position, err) => {
-      if (position) this.setState({ position: position.coords });
+      if (position)
+        this.setState({
+          position: position.coords,
+          gotCurrentLocation: true
+        });
       if (err) console.log(err);
-    });
-    this.setState(currentState => {
-      return { sSet: currentState.sSet + 1 };
     });
   };
 
   getRoute = () => {
-    console.log("getting route");
+    console.log('getting route');
     getReq(`https://tralebackend.herokuapp.com/api/routes/2`).then(
       ({ route }) => {
-        this.setState(currentState => {
-          return {
+        console.log(route);
+        this.setState(
+          {
             allDestinations: route,
-            nextDestination: route[0],
-            sSet: currentState.sSet + 1
-          };
-        });
+            nextDestination: route[0]
+          },
+          () => {
+            this.setState({ gotRoute: true });
+          }
+        );
       }
     );
   };
 
   findDistance = () => {
-    console.log(this.state, "getting distance");
+    console.log(this.state, 'getting distance');
     const { position, nextDestination } = this.state;
     const DistanceMatrix = new google.maps.DistanceMatrixService();
 
@@ -52,11 +61,15 @@ class CheckIn extends Component {
         destinations: [
           new google.maps.LatLng(nextDestination.lat, nextDestination.lng)
         ],
-        travelMode: "WALKING"
+        travelMode: 'WALKING'
       },
-      ({ rows }, status) => {
+      ({ rows }) => {
         const distance = rows[0].elements[0].distance.value;
-        this.setState({ distance });
+        this.setState({
+          distance: distance,
+          gotCurrentLocation: false,
+          gotRoute: false
+        });
       }
     );
   };
@@ -64,14 +77,20 @@ class CheckIn extends Component {
   handleCheckInButton = () => {
     const { distance } = this.state;
     if (distance <= 1000) {
-      getReq("https://tralebackend.herokuapp.com/api/user_routes", {
+      getReq('https://tralebackend.herokuapp.com/api/user_routes', {
         user_id: 1,
         routes_id: 2
       }).then(res => {
-        console.log(res.data, "<<<<<<<");
+        this.setState({
+          noticeMsg: 'You have been checked-in',
+          noticeMsgDisplayed: true
+        });
       });
     } else {
-      // show message that the user is too far from the pub
+      this.setState({
+        noticeMsg: 'You are so far from the pub!',
+        noticeMsgDisplayed: true
+      });
     }
   };
 
@@ -81,22 +100,35 @@ class CheckIn extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.sSet !== prevState.sSet && this.state.sSet >= 2) {
+    const { gotCurrentLocation, gotRoute } = this.state;
+    if (
+      gotCurrentLocation !== prevState.gotCurrentLocation &&
+      gotRoute !== prevState.gotRoute
+    ) {
       this.findDistance();
     }
   }
 
   render() {
+    const { noticeMsg, noticeMsgDisplayed } = this.state;
     return (
-      <IonPage>
-        <IonTitle>Location Tracking</IonTitle>
+      <IonPage className="CheckIn-Page">
         <IonButton
+          className="CheckIn-Button"
           onClick={() => {
             this.handleCheckInButton();
           }}
         >
           Check-in
         </IonButton>
+        {noticeMsg && (
+          <NoticeMsg
+            msg={noticeMsg}
+            header={'Checking-in'}
+            button={'Okay!'}
+            isDisplayed={noticeMsgDisplayed}
+          />
+        )}
       </IonPage>
     );
   }

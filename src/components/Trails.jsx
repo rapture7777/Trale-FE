@@ -5,7 +5,8 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
-  IonContent
+  IonContent,
+  IonSpinner
 } from '@ionic/react';
 import '../css/Trails.css';
 import * as utils from '../utils';
@@ -14,20 +15,25 @@ import { Link } from 'react-router-dom';
 class Trails extends Component {
   state = {
     trails: [],
-    isLoading: true
+    loading: true
   };
 
   componentDidMount() {
     if (!this.state.trails.length) {
       utils.getTrails().then(routes => {
-        this.setState({ trails: [...routes] });
+        this.setState({ trails: [...routes], loading: false });
       });
     }
   }
 
   render() {
     const { getRouteId } = this.props;
-    return (
+    const { loading } = this.state;
+    return loading ? (
+      <IonPage className="Loading-Page">
+        <IonSpinner className="Loading-Spinner" name="lines" />
+      </IonPage>
+    ) : (
       <IonPage className="Trails-page">
         <IonContent>
           <h3 className="Title">Trails</h3>
@@ -35,6 +41,7 @@ class Trails extends Component {
             this.state.trails.map(route => {
               return (
                 <Link
+                  key={route.id}
                   to={{
                     pathname: `/components/Map/${route.id}`
                   }}
@@ -55,24 +62,10 @@ class Trails extends Component {
                 </Link>
               );
             })}
-          <IonCard className="Trail-Card" button="true">
-            <IonCardHeader>
-              <IonCardTitle>Number 3 Real Ale Trail</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              As featured on the BBC's Oz and James Drink to Britain, The
-              Transpennine Real Ale Trail is a unique voyage to a selection of
-              Yorkshire and Lancashires best real ale pubs - on a train! <br />
-              <br />
-              All the pubs are within a stones throw of their respective Railway
-              Stations, so finding your way there (and back) couldn't be easier.
-            </IonCardContent>
-          </IonCard>
         </IonContent>
       </IonPage>
     );
   }
 }
-
 
 export default Trails;

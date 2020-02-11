@@ -9,11 +9,8 @@ import {
 import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import axios from 'axios';
 import '../css/Map.css';
-
-// hardcoded example location objects
-// const origin = { lat: 40.756795, lng: -73.954298 };
-// const waypoints = [{ location: new google.maps.LatLng(41.3, -75.95429) }];
-// const destination = { lat: 41.756795, lng: -78.954298 };
+import { Plugins } from '@capacitor/core';
+import CheckIn from './CheckIn';
 
 class Map extends Component {
   state = {
@@ -24,26 +21,22 @@ class Map extends Component {
     transitMarkers: [],
     origin: {},
     userLocation: {
-      lat: +localStorage.getItem('lat'),
-      lng: +localStorage.getItem('lng')
+      lat: '',
+      lng: ''
     },
     loading: this.props.loading
   };
 
-  //going to get an id from the button which was clicked on on trail list
   updateTrailPubs(id) {
-    //change to take id when trail list buttons work, for now set manually
     return axios
       .get(`https://tralebackend.herokuapp.com/api/routes/${id}`)
       .then(response => {
-        //set state to type that we receive from backend once this is implemented
         this.setState({
           trailPubs: response.data.route,
           type: 'WALKING',
           trailId: id
         });
       });
-    // ^ setting state with the pubs for one trail
   }
 
   getLatLng(addressString) {
@@ -59,17 +52,37 @@ class Map extends Component {
           };
         });
       } else console.error(`error fetching directions ${results}`);
-      // probably best to do something if it cant recognise the pub name, implement
+    });
+  }
+
+  // handleCheckIn(pubId) {
+  //   console.log('checked in');
+  // }
+
+  setNamesAndLocations(result) {
+    result.routes[0].legs.forEach((leg, legIndex) => {
+      if (legIndex === result.routes[0].legs.length - 1) {
+        //edit end address
+        result.routes[0].legs[
+          legIndex
+        ].end_address = `<div class="venue_map_infowindow"><h3>${
+          this.state.trailPubs[legIndex + 1].pub_name
+        }</h3><p>${
+          this.state.trailPubs[legIndex + 1].pub_description
+        }<p/></div>`;
+      }
+      result.routes[0].legs[
+        legIndex
+      ].start_address = `<div class="venue_map_infowindow" id=${this.state.trailPubs[legIndex].id}><h3>${this.state.trailPubs[legIndex].pub_name}</h3><p>${this.state.trailPubs[legIndex].pub_description}<p/>
+      </div>`;
     });
   }
 
   updateDirectionsAndMap() {
     const directionsService = new google.maps.DirectionsService();
-
     let origin = '';
     let destination = '';
     const waypoints = [];
-
     this.state.trailPubs.forEach((pub, index) => {
       if (index === 0) {
         origin = pub.pub_name;
@@ -80,8 +93,15 @@ class Map extends Component {
       } else if (this.state.type === 'TRANSIT') {
         this.getLatLng(pub.pub_name);
       }
-      //if we implement transit, then we can change as necessary
     });
+
+    // let infoWindow1 = new google.maps.InfoWindow({
+    //   content: 'hello',
+    //   width: 200
+    // });
+
+    // let infoWindow1 =
+    //   '<div class="venue_map_infowindow"><a class="location" ><h3>Hello</h3></a></div>';
 
     directionsService.route(
       {
@@ -92,12 +112,17 @@ class Map extends Component {
       },
       (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
+          console.log(this.state);
+          console.log(result, 'directions result');
+
+          this.setNamesAndLocations(result);
+          //make it do it for all of them
+
           this.setState({
             loading: false,
             origin: origin,
             directions: result
           });
-          this.forceUpdate();
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -106,7 +131,23 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    if (this.state.trailId !== this.props.routeId) {
+    const { Geolocation } = Plugins;
+    Geolocation.getCurrentPosition({}, (position, err) => {
+      if (!err) {
+        this.setState({
+          userLocation: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+        });
+      } else {
+        console.log(err);
+      }
+    });
+    if (
+      this.state.trailId !== this.props.routeId &&
+      this.props.routeId !== null
+    ) {
       this.updateTrailPubs(this.props.routeId).then(() => {
         this.updateDirectionsAndMap();
       });
@@ -114,38 +155,27 @@ class Map extends Component {
   }
 
   render() {
-    let defaultCenter = {
-      lat: 53.4844482,
-      lng: -2.064649
-    };
-    // put user's geolocation in here when we have it
-        
     const { userLocation, directions, loading } = this.state;
+    const { routeId } = this.props;
+    let defaultCenter = new google.maps.LatLng(
+      userLocation.lat,
+      userLocation.lng
+    );
 
     const GoogleMapMain = withGoogleMap(() => (
-      <GoogleMap onIdle={() => {
-          google.maps.event.trigger(GoogleMap, 'resize');
-          console.log('resize');
-        }} defaultCenter={defaultCenter} defaultZoom={13}>
-        <DirectionsRenderer
-          directions={directions}
-          // options={{ markerOptions: { label: 'Stalybridge buffet bar' } }}
-          // can style the markers as above
-        />
-       <Marker position={userLocation} />
-        {this.state.type === 'TRANSIT' && (
-          <>
-            {this.state.transitMarkers.map(LatLng => {
-              return <Marker position={LatLng} />;
-            })}
-          </>
-        )}
+      <GoogleMap defaultCenter={defaultCenter} defaultZoom={13}>
+        <DirectionsRenderer directions={directions} />
+        <Marker position={defaultCenter} />
       </GoogleMap>
     ));
 
     return loading ? (
       <IonPage className="Loading-Page">
-        <IonSpinner className="Loading-Spinner" name="lines" />
+        {routeId ? (
+          <IonSpinner className="Loading-Spinner" name="lines" />
+        ) : (
+          <h3 className="Loading-Text">Please select a trail...</h3>
+        )}
       </IonPage>
     ) : (
       <IonPage className="Map-page" style={{ visibility: 'visible' }}>
@@ -160,6 +190,7 @@ class Map extends Component {
             />
           }
         />
+        <CheckIn />
       </IonPage>
     );
   }

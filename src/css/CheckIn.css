@@ -1,0 +1,14 @@
+.CheckIn-Page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+
+.CheckIn-Button {
+  align-self: center;
+  justify-self: center;
+  padding-top: 72vh;
+  position: absolute;
+}
