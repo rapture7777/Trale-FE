@@ -19,12 +19,11 @@ import axios from "axios";
 class NavBar extends Component {
   state = {
     trailList: [],
-    selectedTrail: NaN,
-    user: {}
+    selectedTrail: NaN
   };
 
   componentDidMount = () => {
-    this.fetchUserById();
+    //this.fetchUserById();
     this.fetchAllTrails();
   };
 
@@ -36,17 +35,16 @@ class NavBar extends Component {
       });
   };
 
-  fetchUserById = () => {
-    return axios
-      .get("https://tralebackend.herokuapp.com/api/users/1")
-      .then(({ data: { user } }) => {
-        this.setState({ user });
-      });
-  };
+  // fetchUserById = () => {
+  //   return axios
+  //     .get("https://tralebackend.herokuapp.com/api/users/1")
+  //     .then(({ data: { user } }) => {
+  //       this.setState({ user });
+  //     });
+  // };
 
   render() {
     const MapLoader = withScriptjs(Map);
-
     return (
       <IonReactRouter>
         <IonTabs>
@@ -68,7 +66,7 @@ class NavBar extends Component {
               path="/components/UserProfile"
               render={() => (
                 <UserProfile
-                  user={this.state.user}
+                  username={this.props.username}
                   selectedTrail={this.state.selectedTrail}
                 />
               )}

@@ -15,12 +15,12 @@ import {
 import { Authenticator } from "aws-amplify-react";
 
 const UserProfile = props => {
-  const { avatar, username, bio } = props.user;
+  const { avatar, bio } = props.username;
   const { selectedTrail } = props;
+
   return (
     <IonPage>
       <Authenticator authState="signIn" />
-
       <IonGrid className="userProfile">
         <IonRow>
           <IonCol>
@@ -30,7 +30,7 @@ const UserProfile = props => {
           </IonCol>
           <IonCol>
             <IonItem>
-              <IonLabel>{username}</IonLabel>
+              <IonLabel>{props.username}</IonLabel>
             </IonItem>
           </IonCol>
         </IonRow>
@@ -66,14 +66,14 @@ const UserProfile = props => {
                 <IonLabel>Completed Trails</IonLabel>
               </IonListHeader>
               <IonItem>
-                <p>{`${username} has completed "trail name" `}</p>
+                <p>{`${props.username} has completed "trail name" `}</p>
               </IonItem>
               <IonProgressBar value={1}></IonProgressBar>
             </IonCard>
 
             <IonCard>
               <IonItem>
-                <p>{`${username} has completed "trail name" `}</p>
+                <p>{`${props.username} has completed "trail name" `}</p>
               </IonItem>
               <IonProgressBar value={1}></IonProgressBar>
             </IonCard>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./css/App.css";
-import SplashScreen from "./components/splashScreen.jsx";
-import { IonApp, IonPage } from "@ionic/react";
+//import SplashScreen from "./components/splashScreen.jsx";
+import { IonApp } from "@ionic/react";
 import NavBar from "./components/NavBar";
 import Amplify from "aws-amplify";
 import awsmobile from "./aws-exports";
@@ -26,16 +26,15 @@ class App extends Component {
       .then(data => {
         console.log(data);
         //set the state with valid usename
+        //this.setState({ username });
       });
   };
 
   render() {
-    console.log(this.props.authData.username);
-
     return (
       <IonApp>
         {/* <SplashScreen /> */}
-        <NavBar />
+        <NavBar username={this.props.authData.username} />
       </IonApp>
     );
   }
