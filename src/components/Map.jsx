@@ -10,6 +10,7 @@ import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import axios from 'axios';
 import '../css/Map.css';
 import { Plugins } from '@capacitor/core';
+import CheckIn from './CheckIn';
 
 class Map extends Component {
   state = {
@@ -156,7 +157,10 @@ class Map extends Component {
   render() {
     const { userLocation, directions, loading } = this.state;
     const { routeId } = this.props;
-    let defaultCenter = new google.maps.LatLng(51.4466, -1.476454);
+    let defaultCenter = new google.maps.LatLng(
+      userLocation.lat,
+      userLocation.lng
+    );
 
     const GoogleMapMain = withGoogleMap(() => (
       <GoogleMap defaultCenter={defaultCenter} defaultZoom={13}>
@@ -186,6 +190,7 @@ class Map extends Component {
             />
           }
         />
+        <CheckIn />
       </IonPage>
     );
   }

@@ -11,11 +11,11 @@ import {
   IonList,
   IonProgressBar,
   IonCard
-} from "@ionic/react";
-import { Authenticator } from "aws-amplify-react";
+} from '@ionic/react';
+import { Authenticator } from 'aws-amplify-react';
 
 const UserProfile = props => {
-  const { avatar, bio } = props.username;
+  // const { avatar, bio } = props.username;
   const { selectedTrail } = props;
 
   return (
@@ -25,7 +25,7 @@ const UserProfile = props => {
         <IonRow>
           <IonCol>
             <IonAvatar>
-              <img src={avatar} alt="user avatar" />
+              {/* <img src={avatar} alt="user avatar" /> */}
             </IonAvatar>
           </IonCol>
           <IonCol>
@@ -37,9 +37,7 @@ const UserProfile = props => {
 
         <IonRow>
           <IonItem>
-            <ion-text>
-              <p>{bio}</p>
-            </ion-text>
+            <ion-text>{/* <p>{bio}</p> */}</ion-text>
           </IonItem>
         </IonRow>
 
