@@ -54,6 +54,29 @@ class Map extends Component {
     });
   }
 
+  // handleCheckIn(pubId) {
+  //   console.log('checked in');
+  // }
+
+  setNamesAndLocations(result) {
+    result.routes[0].legs.forEach((leg, legIndex) => {
+      if (legIndex === result.routes[0].legs.length - 1) {
+        //edit end address
+        result.routes[0].legs[
+          legIndex
+        ].end_address = `<div class="venue_map_infowindow"><h3>${
+          this.state.trailPubs[legIndex + 1].pub_name
+        }</h3><p>${
+          this.state.trailPubs[legIndex + 1].pub_description
+        }<p/></div>`;
+      }
+      result.routes[0].legs[
+        legIndex
+      ].start_address = `<div class="venue_map_infowindow" id=${this.state.trailPubs[legIndex].id}><h3>${this.state.trailPubs[legIndex].pub_name}</h3><p>${this.state.trailPubs[legIndex].pub_description}<p/>
+      </div>`;
+    });
+  }
+
   updateDirectionsAndMap() {
     const directionsService = new google.maps.DirectionsService();
     let origin = '';
@@ -71,6 +94,14 @@ class Map extends Component {
       }
     });
 
+    // let infoWindow1 = new google.maps.InfoWindow({
+    //   content: 'hello',
+    //   width: 200
+    // });
+
+    // let infoWindow1 =
+    //   '<div class="venue_map_infowindow"><a class="location" ><h3>Hello</h3></a></div>';
+
     directionsService.route(
       {
         origin: origin,
@@ -80,6 +111,12 @@ class Map extends Component {
       },
       (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
+          console.log(this.state);
+          console.log(result, 'directions result');
+
+          this.setNamesAndLocations(result);
+          //make it do it for all of them
+
           this.setState({
             loading: false,
             origin: origin,
