@@ -63,6 +63,29 @@ class Map extends Component {
     });
   }
 
+  // handleCheckIn(pubId) {
+  //   console.log('checked in');
+  // }
+
+  setNamesAndLocations(result) {
+    result.routes[0].legs.forEach((leg, legIndex) => {
+      if (legIndex === result.routes[0].legs.length - 1) {
+        //edit end address
+        result.routes[0].legs[
+          legIndex
+        ].end_address = `<div class="venue_map_infowindow"><h3>${
+          this.state.trailPubs[legIndex + 1].pub_name
+        }</h3><p>${
+          this.state.trailPubs[legIndex + 1].pub_description
+        }<p/></div>`;
+      }
+      result.routes[0].legs[
+        legIndex
+      ].start_address = `<div class="venue_map_infowindow" id=${this.state.trailPubs[legIndex].id}><h3>${this.state.trailPubs[legIndex].pub_name}</h3><p>${this.state.trailPubs[legIndex].pub_description}<p/>
+      </div>`;
+    });
+  }
+
   updateDirectionsAndMap() {
     const directionsService = new google.maps.DirectionsService();
 
@@ -83,6 +106,14 @@ class Map extends Component {
       //if we implement transit, then we can change as necessary
     });
 
+    // let infoWindow1 = new google.maps.InfoWindow({
+    //   content: 'hello',
+    //   width: 200
+    // });
+
+    // let infoWindow1 =
+    //   '<div class="venue_map_infowindow"><a class="location" ><h3>Hello</h3></a></div>';
+
     directionsService.route(
       {
         origin: origin,
@@ -92,12 +123,18 @@ class Map extends Component {
       },
       (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
+          console.log(this.state);
+          console.log(result, 'directions result');
+
+          this.setNamesAndLocations(result);
+          //make it do it for all of them
+
           this.setState({
             loading: false,
             origin: origin,
             directions: result
           });
-          this.forceUpdate();
+          // this.forceUpdate();
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -120,7 +157,16 @@ class Map extends Component {
     };
     // put user's geolocation in here when we have it
 
+    //look into changing the events on the markers in directions renderer, you can edit the infowindows, but it seems they are auto updated on the marker's click so that they are filled with content about the place. the info window variable you create remains the info window that comes up, but the content is changed automatically
+
     const { userLocation, directions, loading } = this.state;
+
+    let infoWindow1 = new google.maps.InfoWindow({
+      content: <p>'hello'</p>,
+      width: 200
+    });
+
+    console.log(infoWindow1, 'infowindow');
 
     const GoogleMapMain = withGoogleMap(() => (
       <GoogleMap
@@ -133,6 +179,10 @@ class Map extends Component {
       >
         <DirectionsRenderer
           directions={directions}
+          options={{
+            infoWindow: infoWindow1
+          }}
+
           // options={{ markerOptions: { label: 'Stalybridge buffet bar' } }}
           // can style the markers as above
         />

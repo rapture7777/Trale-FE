@@ -26,7 +26,7 @@ class NavBar extends Component {
     user: {}
   };
 
-    getRouteId = routeId => {
+  getRouteId = routeId => {
     this.setState({ routeId: routeId }, () => {});
   };
   componentDidMount = () => {
@@ -50,8 +50,8 @@ class NavBar extends Component {
       });
   };
 
-   render() {
-  const MapLoader = withScriptjs(() => <Map routeId={this.state.routeId} />);
+  render() {
+    const MapLoader = withScriptjs(() => <Map routeId={this.state.routeId} />);
 
     return (
       <IonReactRouter>
@@ -75,18 +75,16 @@ class NavBar extends Component {
                 )}
               />
               <Route
-              path="/components/UserProfile"
-              render={() => (
-                <UserProfile
-                  user={this.state.user}
-                  selectedTrail={this.state.selectedTrail}
-                />
-              )}
-              exact={true}
-            />
+                path="/components/UserProfile"
+                render={() => (
+                  <UserProfile
+                    user={this.state.user}
+                    selectedTrail={this.state.selectedTrail}
+                  />
+                )}
+                exact={true}
+              />
             </Switch>
-
-
           </IonRouterOutlet>
           <IonTabBar slot="bottom" translucent="true" className="Tabs">
             <IonTabButton tab="trails" href="/">
@@ -94,7 +92,7 @@ class NavBar extends Component {
                 <b>Trails</b>
               </IonLabel>
             </IonTabButton>
-            <IonTabButton tab="map" href="/components/Map">
+            <IonTabButton tab="map" href="/components/Map/*">
               <IonLabel>
                 <b>Map</b>
               </IonLabel>
