@@ -9,11 +9,7 @@ import {
 import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import axios from 'axios';
 import '../css/Map.css';
-
-// hardcoded example location objects
-// const origin = { lat: 40.756795, lng: -73.954298 };
-// const waypoints = [{ location: new google.maps.LatLng(41.3, -75.95429) }];
-// const destination = { lat: 41.756795, lng: -78.954298 };
+import { Plugins } from '@capacitor/core';
 
 class Map extends Component {
   state = {
@@ -24,26 +20,22 @@ class Map extends Component {
     transitMarkers: [],
     origin: {},
     userLocation: {
-      lat: +localStorage.getItem('lat'),
-      lng: +localStorage.getItem('lng')
+      lat: '',
+      lng: ''
     },
     loading: this.props.loading
   };
 
-  //going to get an id from the button which was clicked on on trail list
   updateTrailPubs(id) {
-    //change to take id when trail list buttons work, for now set manually
     return axios
       .get(`https://tralebackend.herokuapp.com/api/routes/${id}`)
       .then(response => {
-        //set state to type that we receive from backend once this is implemented
         this.setState({
           trailPubs: response.data.route,
           type: 'WALKING',
           trailId: id
         });
       });
-    // ^ setting state with the pubs for one trail
   }
 
   getLatLng(addressString) {
@@ -59,7 +51,6 @@ class Map extends Component {
           };
         });
       } else console.error(`error fetching directions ${results}`);
-      // probably best to do something if it cant recognise the pub name, implement
     });
   }
 
@@ -88,11 +79,9 @@ class Map extends Component {
 
   updateDirectionsAndMap() {
     const directionsService = new google.maps.DirectionsService();
-
     let origin = '';
     let destination = '';
     const waypoints = [];
-
     this.state.trailPubs.forEach((pub, index) => {
       if (index === 0) {
         origin = pub.pub_name;
@@ -103,7 +92,6 @@ class Map extends Component {
       } else if (this.state.type === 'TRANSIT') {
         this.getLatLng(pub.pub_name);
       }
-      //if we implement transit, then we can change as necessary
     });
 
     // let infoWindow1 = new google.maps.InfoWindow({
@@ -134,7 +122,6 @@ class Map extends Component {
             origin: origin,
             directions: result
           });
-          // this.forceUpdate();
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -143,7 +130,23 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    if (this.state.trailId !== this.props.routeId) {
+    const { Geolocation } = Plugins;
+    Geolocation.getCurrentPosition({}, (position, err) => {
+      if (!err) {
+        this.setState({
+          userLocation: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+        });
+      } else {
+        console.log(err);
+      }
+    });
+    if (
+      this.state.trailId !== this.props.routeId &&
+      this.props.routeId !== null
+    ) {
       this.updateTrailPubs(this.props.routeId).then(() => {
         this.updateDirectionsAndMap();
       });
@@ -151,55 +154,24 @@ class Map extends Component {
   }
 
   render() {
-    let defaultCenter = {
-      lat: 53.4844482,
-      lng: -2.064649
-    };
-    // put user's geolocation in here when we have it
-
-    //look into changing the events on the markers in directions renderer, you can edit the infowindows, but it seems they are auto updated on the marker's click so that they are filled with content about the place. the info window variable you create remains the info window that comes up, but the content is changed automatically
-
     const { userLocation, directions, loading } = this.state;
-
-    let infoWindow1 = new google.maps.InfoWindow({
-      content: <p>'hello'</p>,
-      width: 200
-    });
-
-    console.log(infoWindow1, 'infowindow');
+    const { routeId } = this.props;
+    let defaultCenter = new google.maps.LatLng(51.4466, -1.476454);
 
     const GoogleMapMain = withGoogleMap(() => (
-      <GoogleMap
-        onIdle={() => {
-          google.maps.event.trigger(GoogleMap, 'resize');
-          console.log('resize');
-        }}
-        defaultCenter={defaultCenter}
-        defaultZoom={13}
-      >
-        <DirectionsRenderer
-          directions={directions}
-          options={{
-            infoWindow: infoWindow1
-          }}
-
-          // options={{ markerOptions: { label: 'Stalybridge buffet bar' } }}
-          // can style the markers as above
-        />
-        <Marker position={userLocation} />
-        {this.state.type === 'TRANSIT' && (
-          <>
-            {this.state.transitMarkers.map(LatLng => {
-              return <Marker position={LatLng} />;
-            })}
-          </>
-        )}
+      <GoogleMap defaultCenter={defaultCenter} defaultZoom={13}>
+        <DirectionsRenderer directions={directions} />
+        <Marker position={defaultCenter} />
       </GoogleMap>
     ));
 
     return loading ? (
       <IonPage className="Loading-Page">
-        <IonSpinner className="Loading-Spinner" name="lines" />
+        {routeId ? (
+          <IonSpinner className="Loading-Spinner" name="lines" />
+        ) : (
+          <h3 className="Loading-Text">Please select a trail...</h3>
+        )}
       </IonPage>
     ) : (
       <IonPage className="Map-page" style={{ visibility: 'visible' }}>
