@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./css/App.css";
-//import SplashScreen from "./components/splashScreen.jsx";
 import { IonApp } from "@ionic/react";
 import NavBar from "./components/NavBar";
 import Amplify from "aws-amplify";
@@ -33,7 +32,6 @@ class App extends Component {
     console.log(this.state.username);
     return (
       <IonApp>
-        {/* <SplashScreen /> */}
         <NavBar username={this.props.authData.username} />
       </IonApp>
     );

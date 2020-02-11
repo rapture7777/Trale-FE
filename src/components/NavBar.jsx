@@ -1,27 +1,33 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   IonRouterOutlet,
   IonTabBar,
   IonTabs,
   IonTabButton,
-  IonLabel
-} from "@ionic/react";
-import { Route } from "react-router-dom";
-import { IonReactRouter } from "@ionic/react-router";
-import Trails from "./Trails";
-import Map from "./Map";
-import UserProfile from "./UserProfile";
-import "../css/NavBar.css";
-import { withScriptjs } from "react-google-maps";
-//import apiKey from '../apiKey';
-import axios from "axios";
+  IonLabel,
+  IonContent
+} from '@ionic/react';
+import { Route, Switch } from 'react-router-dom';
+import { IonReactRouter } from '@ionic/react-router';
+import Trails from './Trails';
+import Map from './Map';
+import UserProfile from './UserProfile';
+import '../css/NavBar.css';
+import '../css/Map.css';
+import { withScriptjs } from 'react-google-maps';
+import apiKey from '../apiKey';
+import axios from 'axios';
 
 class NavBar extends Component {
   state = {
     trailList: [],
-    selectedTrail: NaN
+    selectedTrail: NaN,
+    routeId: null
   };
 
+  getRouteId = routeId => {
+    this.setState({ routeId: routeId }, () => {});
+  };
   componentDidMount = () => {
     //this.fetchUserById();
     this.fetchAllTrails();
@@ -29,43 +35,47 @@ class NavBar extends Component {
 
   fetchAllTrails = () => {
     return axios
-      .get("https://tralebackend.herokuapp.com/api/routes")
+      .get('https://tralebackend.herokuapp.com/api/routes')
       .then(({ data: { routes } }) => {
         this.setState({ selectedTrail: routes[0].route_name });
       });
   };
 
-  // patchCurrentTrail = () => {
-  //   return axios.patch(`${}`).then
-  // }
-
-  // fetchUserById = () => {
-  //   return axios
-  //     .get("https://tralebackend.herokuapp.com/api/users/1")
-  //     .then(({ data: { user } }) => {
-  //       this.setState({ user });
-  //     });
-  // };
+  render() {
+  const MapLoader = withScriptjs(Map);
+  fetchUserById = () => {
+    return axios
+      .get('https://tralebackend.herokuapp.com/api/users/1')
+      .then(({ data: { user } }) => {
+        this.setState({ user });
+      });
+  };
 
   render() {
-    const MapLoader = withScriptjs(Map);
+    const MapLoader = withScriptjs(() => (
+      <Map routeId={this.state.routeId} loading={true} />
+    ));
+
     return (
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/components/Trails" component={Trails} exact={true} />
-            {/* <Route
-              path="/components/Map"
-              render={() => (
-                <div>
+            <Switch>
+              <Route
+                path="/"
+                render={() => <Trails getRouteId={this.getRouteId} />}
+                exact={true}
+              />
+              <Route
+                path="/components/Map/:routeId"
+                render={() => (
                   <MapLoader
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
-                    loadingElement={<div style={{ height: `100%` }} />}
+                    loadingElement={<IonContent className="Map-page" />}
                   />
-                </div>
-              )}
-              exact={true}
-            /> */}
+                )}
+                exact={true}
+              />
             <Route
               path="/components/UserProfile"
               render={() => (
@@ -73,17 +83,15 @@ class NavBar extends Component {
                   username={this.props.username}
                   selectedTrail={this.state.selectedTrail}
                 />
-              )}
-              exact={true}
-            />
+            </Switch>
           </IonRouterOutlet>
           <IonTabBar slot="bottom" translucent="true" className="Tabs">
-            <IonTabButton tab="trails" href="/components/Trails">
+            <IonTabButton tab="trails" href="/">
               <IonLabel>
                 <b>Trails</b>
               </IonLabel>
             </IonTabButton>
-            <IonTabButton tab="map" href="/components/Map">
+            <IonTabButton tab="map" href="/components/Map/*">
               <IonLabel>
                 <b>Map</b>
               </IonLabel>
