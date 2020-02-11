@@ -1,6 +1,4 @@
 import React from "react";
-import RoutePick from "./components/RoutePick";
-
 import "./css/App.css";
 // import SplashScreen from "./components/splashScreen.jsx";
 import NavBar from "./components/NavBar";
@@ -21,7 +19,7 @@ class App extends React.Component {
   render() {
     return (
       <IonApp>
-        <RoutePick />
+        <NavBar />
       </IonApp>
     );
   }
