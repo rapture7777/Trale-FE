@@ -1,6 +1,6 @@
 /*global google*/
 import React, { Component } from 'react';
-import { IonPage, IonTitle, IonButton } from '@ionic/react';
+import { IonPage, IonButton } from '@ionic/react';
 import { Geolocation } from '@capacitor/core';
 import NoticeMsg from './NoticeMsg';
 import { getReq } from '../utils/api';
@@ -31,8 +31,9 @@ class CheckIn extends Component {
   };
 
   getRoute = () => {
+    const { routeId } = this.props;
     console.log('getting route');
-    getReq(`https://tralebackend.herokuapp.com/api/routes/2`).then(
+    getReq(`https://tralebackend.herokuapp.com/api/routes/${routeId}`).then(
       ({ route }) => {
         console.log(route);
         this.setState(
@@ -49,10 +50,8 @@ class CheckIn extends Component {
   };
 
   findDistance = () => {
-    console.log(this.state, 'getting distance');
     const { position, nextDestination } = this.state;
     const DistanceMatrix = new google.maps.DistanceMatrixService();
-
     DistanceMatrix.getDistanceMatrix(
       {
         origins: [

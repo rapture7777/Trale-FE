@@ -39,26 +39,6 @@ class Map extends Component {
       });
   }
 
-  getLatLng(addressString) {
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: addressString }, (results, status) => {
-      if (status === 'OK') {
-        this.setState(currentState => {
-          return {
-            transitMarkers: [
-              ...currentState.transitMarkers,
-              results[0].geometry.location
-            ]
-          };
-        });
-      } else console.error(`error fetching directions ${results}`);
-    });
-  }
-
-  // handleCheckIn(pubId) {
-  //   console.log('checked in');
-  // }
-
   setNamesAndLocations(result) {
     result.routes[0].legs.forEach((leg, legIndex) => {
       if (legIndex === result.routes[0].legs.length - 1) {
@@ -90,18 +70,8 @@ class Map extends Component {
         destination = pub.pub_name;
       } else if (this.state.type === 'WALKING') {
         waypoints.push({ location: pub.pub_name });
-      } else if (this.state.type === 'TRANSIT') {
-        this.getLatLng(pub.pub_name);
       }
     });
-
-    // let infoWindow1 = new google.maps.InfoWindow({
-    //   content: 'hello',
-    //   width: 200
-    // });
-
-    // let infoWindow1 =
-    //   '<div class="venue_map_infowindow"><a class="location" ><h3>Hello</h3></a></div>';
 
     directionsService.route(
       {
@@ -190,7 +160,7 @@ class Map extends Component {
             />
           }
         />
-        <CheckIn />
+        <CheckIn routeId={routeId} />
       </IonPage>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './css/App.css';
-import { IonApp } from '@ionic/react';
+import { IonApp, IonPage, IonSpinner } from '@ionic/react';
 import NavBar from './components/NavBar';
 import Amplify from 'aws-amplify';
 import awsmobile from './aws-exports';
@@ -12,7 +12,8 @@ Amplify.configure(awsmobile);
 class App extends Component {
   state = {
     username: null,
-    id: null
+    id: null,
+    loading: true
   };
 
   componentDidMount = () => {
@@ -24,13 +25,17 @@ class App extends Component {
     return axios
       .get(`https://tralebackend.herokuapp.com/api/users?username=${username}`)
       .then(({ data: { users } }) => {
-        this.setState({ username: username, id: users[0].id });
+        this.setState({ username: username, id: users[0].id, loading: false });
       });
   };
 
   render() {
-    const { id, username } = this.state;
-    return (
+    const { id, username, loading } = this.state;
+    return loading ? (
+      <IonPage className="Loading-Page">
+        <IonSpinner className="Loading-Spinner" name="lines" />
+      </IonPage>
+    ) : (
       <IonApp>
         <NavBar username={username} id={id} />
       </IonApp>

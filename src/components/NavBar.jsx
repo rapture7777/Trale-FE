@@ -16,12 +16,11 @@ import '../css/NavBar.css';
 import '../css/Map.css';
 import { withScriptjs } from 'react-google-maps';
 import apiKey from '../apiKey';
-import axios from 'axios';
 
 class NavBar extends Component {
   state = {
     trailList: [],
-    selectedTrail: NaN,
+    userTrails: [],
     routeId: null
   };
 
@@ -29,26 +28,12 @@ class NavBar extends Component {
     this.setState({ routeId: routeId }, () => {});
   };
 
-  componentDidMount = () => {
-    console.log(this.props);
-    this.fetchAllTrails();
-  };
-
-  fetchAllTrails = () => {
-    const { id } = this.props;
-    return axios
-      .get(`https://tralebackend.herokuapp.com/api/user_routes/${4}`)
-      .then(res => {
-        console.log(res);
-        // this.setState({ selectedTrail: routes[0].route_name });
-      });
-  };
-
   render() {
     const MapLoader = withScriptjs(() => (
       <Map routeId={this.state.routeId} loading={true} />
     ));
-
+    const { username, id } = this.props;
+    const { userTrailsLoading } = this.state;
     return (
       <IonReactRouter>
         <IonTabs>
@@ -73,8 +58,9 @@ class NavBar extends Component {
                 path="/components/UserProfile"
                 render={() => (
                   <UserProfile
-                    username={this.props.username}
-                    selectedTrail={this.state.selectedTrail}
+                    username={username}
+                    id={id}
+                    userTrails={this.state.userTrails}
                   />
                 )}
               />
