@@ -51,7 +51,9 @@ class NavBar extends Component {
   };
 
   render() {
-    const MapLoader = withScriptjs(() => <Map routeId={this.state.routeId} />);
+    const MapLoader = withScriptjs(() => (
+      <Map routeId={this.state.routeId} loading={true} />
+    ));
 
     return (
       <IonReactRouter>
@@ -68,11 +70,10 @@ class NavBar extends Component {
                 render={() => (
                   <MapLoader
                     googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${apiKey}`}
-                    routeId={this.props.routeId}
                     loadingElement={<IonContent className="Map-page" />}
-                    loading={true}
                   />
                 )}
+                exact={true}
               />
               <Route
                 path="/components/UserProfile"

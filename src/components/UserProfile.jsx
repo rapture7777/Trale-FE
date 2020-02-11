@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   IonAvatar,
   IonGrid,
@@ -10,7 +10,7 @@ import {
   IonListHeader,
   IonList,
   IonProgressBar
-} from "@ionic/react";
+} from '@ionic/react';
 
 const UserProfile = props => {
   const { avatar, username, bio } = props.user;

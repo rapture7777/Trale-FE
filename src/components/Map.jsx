@@ -9,6 +9,8 @@ import {
 import { IonContent, IonPage, IonSpinner } from '@ionic/react';
 import axios from 'axios';
 import '../css/Map.css';
+import { Plugins } from '@capacitor/core';
+const { Geolocation } = Plugins;
 
 // hardcoded example location objects
 // const origin = { lat: 40.756795, lng: -73.954298 };
@@ -24,8 +26,8 @@ class Map extends Component {
     transitMarkers: [],
     origin: {},
     userLocation: {
-      lat: +localStorage.getItem('lat'),
-      lng: +localStorage.getItem('lng')
+      lat: '',
+      lng: ''
     },
     loading: this.props.loading
   };
@@ -97,7 +99,6 @@ class Map extends Component {
             origin: origin,
             directions: result
           });
-          this.forceUpdate();
         } else {
           console.error(`error fetching directions ${result}`);
         }
@@ -106,7 +107,22 @@ class Map extends Component {
   }
 
   componentDidMount() {
-    if (this.state.trailId !== this.props.routeId) {
+    Geolocation.watchPosition({}, (position, err) => {
+      if (!err) {
+        this.setState({
+          userLocation: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+        });
+      } else {
+        console.log(err);
+      }
+    });
+    if (
+      this.state.trailId !== this.props.routeId &&
+      this.props.routeId !== null
+    ) {
       this.updateTrailPubs(this.props.routeId).then(() => {
         this.updateDirectionsAndMap();
       });
@@ -114,25 +130,22 @@ class Map extends Component {
   }
 
   render() {
-    let defaultCenter = {
-      lat: 53.4844482,
-      lng: -2.064649
-    };
-    // put user's geolocation in here when we have it
-        
     const { userLocation, directions, loading } = this.state;
+    const { routeId } = this.props;
+    let defaultCenter = new google.maps.LatLng(
+      userLocation.lat,
+      userLocation.lng
+    );
+    // put user's geolocation in here when we have it
 
     const GoogleMapMain = withGoogleMap(() => (
-      <GoogleMap onIdle={() => {
-          google.maps.event.trigger(GoogleMap, 'resize');
-          console.log('resize');
-        }} defaultCenter={defaultCenter} defaultZoom={13}>
+      <GoogleMap defaultCenter={defaultCenter} defaultZoom={13}>
         <DirectionsRenderer
           directions={directions}
           // options={{ markerOptions: { label: 'Stalybridge buffet bar' } }}
           // can style the markers as above
         />
-       <Marker position={userLocation} />
+        <Marker position={userLocation} />
         {this.state.type === 'TRANSIT' && (
           <>
             {this.state.transitMarkers.map(LatLng => {
@@ -145,7 +158,11 @@ class Map extends Component {
 
     return loading ? (
       <IonPage className="Loading-Page">
-        <IonSpinner className="Loading-Spinner" name="lines" />
+        {routeId ? (
+          <IonSpinner className="Loading-Spinner" name="lines" />
+        ) : (
+          <h3 className="Loading-Text">Please select a trail...</h3>
+        )}
       </IonPage>
     ) : (
       <IonPage className="Map-page" style={{ visibility: 'visible' }}>
