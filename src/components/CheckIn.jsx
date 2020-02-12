@@ -20,17 +20,18 @@ class CheckIn extends Component {
     noticeMsgDisplayed: false
   };
 
-  getCurrentLocation = () => {
+  async getCurrentLocation() {
     console.log('getting current location');
-    Geolocation.watchPosition({}, (position, err) => {
-      if (position)
-        this.setState({
+    const position = await Geolocation.getCurrentPosition();
+    if (position)
+      this.setState(
+        {
           position: position.coords,
           gotCurrentLocation: true
-        });
-      if (err) console.log(err);
-    });
-  };
+        },
+        () => console.log(this.state.position, 'Current Position')
+      );
+  }
 
   getRoute = () => {
     const { routeId } = this.props;
@@ -66,12 +67,15 @@ class CheckIn extends Component {
         travelMode: 'WALKING'
       },
       ({ rows }) => {
+        console.log(rows);
         const distance = rows[0].elements[0].distance.value;
-        this.setState({
-          distance: distance,
-          gotCurrentLocation: false,
-          gotRoute: false
-        });
+        this.setState(
+          {
+            distance: distance,
+            gotCurrentLocation: false
+          },
+          () => console.log(this.state.distance, 'Distance')
+        );
       }
     );
   };
@@ -85,13 +89,14 @@ class CheckIn extends Component {
         inc_progress: 1
       })
       .then(({ data: { updatedUserRoutes: { progress } } }) =>
-        console.log(progress)
+        console.log(progress, 'progress')
       );
   };
 
   handleCheckInButton = () => {
+    this.getCurrentLocation();
     const { distance, nextDestination } = this.state;
-    if (distance <= 100) {
+    if (distance <= 300) {
       this.setState(
         currentState => {
           return {
@@ -117,14 +122,17 @@ class CheckIn extends Component {
   componentDidMount() {
     this.getRoute();
     this.getCurrentLocation();
+    this.interval = setInterval(() => this.getCurrentLocation(), 300000);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { gotCurrentLocation, gotRoute } = this.state;
-    if (
-      gotCurrentLocation !== prevState.gotCurrentLocation &&
-      gotRoute !== prevState.gotRoute
-    ) {
+    const {
+      gotCurrentLocation,
+      gotRoute,
+      routeIndex,
+      allDestinations
+    } = this.state;
+    if (gotCurrentLocation && gotRoute && routeIndex < allDestinations.length) {
       this.findDistance();
     }
   }
