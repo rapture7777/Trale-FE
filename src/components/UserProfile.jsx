@@ -29,25 +29,18 @@ class UserProfile extends React.Component {
   };
 
   fetchUserTrails = () => {
-    const { id } = this.props;
+    const { userId } = this.props;
     return axios
-      .get(`https://tralebackend.herokuapp.com/api/user_routes/${id}`)
+      .get(`https://tralebackend.herokuapp.com/api/user_routes/${userId}`)
       .then(({ data }) => {
         this.setState({ userTrails: data, loading: false });
       });
-  };
-
-  fetchPubAmount = routeId => {
-    return axios
-      .get(`https://tralebackend.herokuapp.com/api/routes/${routeId}`)
-      .then(res => console.log(res));
   };
 
   render() {
     const { avatar, bio } = this.props.username;
     const { username } = this.props;
     const { userTrails, loading } = this.state;
-    console.log(userTrails);
     return loading ? (
       <IonPage className="Loading-Page">
         <IonSpinner className="Loading-Spinner" name="lines" />
@@ -93,14 +86,12 @@ class UserProfile extends React.Component {
                       // eslint-disable-next-line array-callback-return
                       userTrails.map(function(trail) {
                         if (!trail.completed) {
-                          const pubs = this.fetchPubAmount(trail.routes_id);
-                          const progress = trail.progress / pubs.length;
                           return (
                             <IonRow key={trail.id}>
                               <IonItem>
                                 <p>{`The ${trail.route_name} is currently in progress..`}</p>
                               </IonItem>
-                              <IonProgressBar value={progress}></IonProgressBar>
+                              <IonProgressBar value={0.25}></IonProgressBar>
                             </IonRow>
                           );
                         }
