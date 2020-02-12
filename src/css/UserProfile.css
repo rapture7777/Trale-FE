@@ -1,3 +1,9 @@
-.userProfle {
-  min-width: 100%;
+.userProfile-Page {
+  margin-top: 5%;
+  height: 100vh;
+}
+
+.userProfile-Content {
+  height: 100%;
+  position: absolute;
 }

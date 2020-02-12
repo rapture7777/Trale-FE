@@ -9,6 +9,7 @@ import '../css/CheckIn.css';
 class CheckIn extends Component {
   state = {
     position: {},
+    routeIndex: 0,
     nextDestination: {},
     allDestinations: {},
     gotRoute: false,
@@ -32,6 +33,7 @@ class CheckIn extends Component {
 
   getRoute = () => {
     const { routeId } = this.props;
+    const { routeIndex } = this.state;
     console.log('getting route');
     getReq(`https://tralebackend.herokuapp.com/api/routes/${routeId}`).then(
       ({ route }) => {
@@ -39,7 +41,7 @@ class CheckIn extends Component {
         this.setState(
           {
             allDestinations: route,
-            nextDestination: route[0]
+            nextDestination: route[routeIndex]
           },
           () => {
             this.setState({ gotRoute: true });
@@ -74,20 +76,30 @@ class CheckIn extends Component {
   };
 
   handleCheckInButton = () => {
-    const { distance } = this.state;
+    const { distance, nextDestination, allDestinations } = this.state;
+    const { userId, routeId } = this.props;
+    console.log(allDestinations);
     if (distance <= 1000) {
       getReq('https://tralebackend.herokuapp.com/api/user_routes', {
-        user_id: 1,
-        routes_id: 2
+        user_id: userId,
+        routes_id: routeId
       }).then(res => {
-        this.setState({
-          noticeMsg: 'You have been checked-in',
-          noticeMsgDisplayed: true
-        });
+        this.setState(
+          currentState => {
+            return {
+              noticeMsg: `You've arrived at ${nextDestination.pub_name}`,
+              noticeMsgDisplayed: true,
+              routeIndex: currentState.routeIndex + 1,
+              nextDestination:
+                currentState.allDestinations[currentState.routeIndex + 1]
+            };
+          },
+          () => console.log(this.state)
+        );
       });
     } else {
       this.setState({
-        noticeMsg: 'You are so far from the pub!',
+        noticeMsg: `You are too far from ${nextDestination.pub_name}!`,
         noticeMsgDisplayed: true
       });
     }
@@ -109,22 +121,50 @@ class CheckIn extends Component {
   }
 
   render() {
-    const { noticeMsg, noticeMsgDisplayed } = this.state;
+    const {
+      noticeMsg,
+      noticeMsgDisplayed,
+      routeIndex,
+      allDestinations,
+      nextDestination
+    } = this.state;
     return (
       <IonPage className="CheckIn-Page">
-        <IonButton
-          className="CheckIn-Button"
-          onClick={() => {
-            this.handleCheckInButton();
-          }}
-        >
-          Check-in
-        </IonButton>
+        {routeIndex <= allDestinations.length - 1 && (
+          <IonButton
+            className="CheckIn-Button"
+            onClick={() => {
+              this.handleCheckInButton();
+            }}
+          >
+            Check-in
+          </IonButton>
+        )}
         {noticeMsg && (
           <NoticeMsg
             msg={noticeMsg}
             header={'Checking-in'}
-            button={'Okay!'}
+            button={{
+              text: 'Okay!',
+              handler: () => {
+                this.setState({ noticeMsgDisplayed: false });
+              }
+            }}
+            onClick={() => console.log('click')}
+            isDisplayed={noticeMsgDisplayed}
+          />
+        )}
+        {routeIndex === allDestinations.length && (
+          <NoticeMsg
+            msg={`Congratulations you have completed ${allDestinations[0].route_name}!`}
+            header={'TrAle Completed!'}
+            button={{
+              text: 'Thanks!',
+              handler: () => {
+                this.setState({ noticeMsgDisplayed: false });
+              }
+            }}
+            onClick={() => console.log('click')}
             isDisplayed={noticeMsgDisplayed}
           />
         )}

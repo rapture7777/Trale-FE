@@ -1,26 +1,46 @@
-import React, { Component } from "react";
-import { IonPage, IonButton } from "@ionic/react";
-import { postReq } from "../utils/postReq";
+import React, { Component } from 'react';
+import { IonPage, IonButton } from '@ionic/react';
+import { postReq } from '../utils/postReq';
+import * as utils from '../utils/api';
 
 class RoutePick extends Component {
-  state = {};
+  state = {
+    route_name: ''
+  };
+
+  componentDidMount() {
+    utils
+      .getReq(
+        `https://tralebackend.herokuapp.com/api/routes/${this.props.routeId}`
+      )
+      .then(res =>
+        this.setState({ route_name: res.route[0].route_name }, () => {
+          console.log(this.state.route_name);
+        })
+      );
+  }
 
   handleClick = () => {
-    const url = "https://tralebackend.herokuapp.com/api/user_routes";
+    const url = `https://tralebackend.herokuapp.com/api/user_routes`;
     postReq(
       url,
-      this.props.user_id,
-      this.props.route_id,
-      this.props.route_name
+      this.props.userId,
+      this.props.routeId,
+      this.state.route_name
     ).then(res => {
-      // show message
+      console.log(res);
     });
   };
 
   render() {
     return (
-      <IonPage>
-        <IonButton onClick={() => this.handleClick()}>Select Route!</IonButton>
+      <IonPage className="CheckIn-Page">
+        <IonButton
+          className="CheckIn-Button"
+          onClick={() => this.handleClick()}
+        >
+          Select Route!
+        </IonButton>
       </IonPage>
     );
   }

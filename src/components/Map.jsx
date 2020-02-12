@@ -11,6 +11,7 @@ import axios from 'axios';
 import '../css/Map.css';
 import { Plugins } from '@capacitor/core';
 import CheckIn from './CheckIn';
+import RoutePick from './RoutePick';
 
 class Map extends Component {
   state = {
@@ -126,7 +127,7 @@ class Map extends Component {
 
   render() {
     const { userLocation, directions, loading } = this.state;
-    const { routeId } = this.props;
+    const { routeId, userId } = this.props;
     let defaultCenter = new google.maps.LatLng(
       userLocation.lat,
       userLocation.lng
@@ -160,7 +161,8 @@ class Map extends Component {
             />
           }
         />
-        <CheckIn routeId={routeId} />
+        <CheckIn routeId={routeId} userId={userId} />
+        <RoutePick userId={userId} routeId={routeId} />
       </IonPage>
     );
   }

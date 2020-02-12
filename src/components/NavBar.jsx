@@ -30,7 +30,7 @@ class NavBar extends Component {
 
   render() {
     const MapLoader = withScriptjs(() => (
-      <Map routeId={this.state.routeId} loading={true} />
+      <Map routeId={this.state.routeId} userId={this.props.id} loading={true} />
     ));
     const { username, id } = this.props;
     const { userTrailsLoading } = this.state;
