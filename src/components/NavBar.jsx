@@ -21,7 +21,8 @@ class NavBar extends Component {
   state = {
     trailList: [],
     userTrails: [],
-    routeId: null
+    routeId: null,
+    routeProgress: 0
   };
 
   getRouteId = routeId => {
@@ -30,10 +31,14 @@ class NavBar extends Component {
 
   render() {
     const MapLoader = withScriptjs(() => (
-      <Map routeId={this.state.routeId} userId={this.props.id} loading={true} />
+      <Map
+        routeId={this.state.routeId}
+        userId={this.props.id}
+        loading={true}
+        getRouteProgress={this.getRouteProgress}
+      />
     ));
     const { username, id } = this.props;
-    const { userTrailsLoading } = this.state;
     return (
       <IonReactRouter>
         <IonTabs>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { IonPage, IonButton } from '@ionic/react';
 import { postReq } from '../utils/postReq';
 import * as utils from '../utils/api';
+import '../css/CheckIn.css';
 
 class RoutePick extends Component {
   state = {
@@ -34,14 +35,14 @@ class RoutePick extends Component {
 
   render() {
     return (
-      <IonPage className="CheckIn-Page">
-        <IonButton
-          className="CheckIn-Button"
-          onClick={() => this.handleClick()}
-        >
-          Select Route!
-        </IonButton>
-      </IonPage>
+      // <IonPage className="CheckIn-Page">
+      <IonButton
+        className="RoutePick-Button"
+        onClick={() => this.handleClick()}
+      >
+        Select Route!
+      </IonButton>
+      // </IonPage>
     );
   }
 }

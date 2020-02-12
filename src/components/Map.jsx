@@ -187,7 +187,7 @@ class Map extends Component {
           userId={userId}
           addCompletedPub={this.addCompletedPub}
         />
-        <RoutePick userId={userId} routeId={routeId} />
+        {/* <RoutePick userId={userId} routeId={routeId} /> */}
       </IonPage>
     );
   }

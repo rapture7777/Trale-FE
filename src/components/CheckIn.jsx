@@ -5,6 +5,7 @@ import { Geolocation } from '@capacitor/core';
 import NoticeMsg from './NoticeMsg';
 import { getReq } from '../utils/api';
 import '../css/CheckIn.css';
+import axios from 'axios';
 
 class CheckIn extends Component {
   state = {
@@ -19,17 +20,18 @@ class CheckIn extends Component {
     noticeMsgDisplayed: false
   };
 
-  getCurrentLocation = () => {
+  async getCurrentLocation() {
     console.log('getting current location');
-    Geolocation.watchPosition({}, (position, err) => {
-      if (position)
-        this.setState({
+    const position = await Geolocation.getCurrentPosition();
+    if (position)
+      this.setState(
+        {
           position: position.coords,
           gotCurrentLocation: true
-        });
-      if (err) console.log(err);
-    });
-  };
+        },
+        () => console.log(this.state.position, 'Current Position')
+      );
+  }
 
   getRoute = () => {
     const { routeId } = this.props;
@@ -65,41 +67,51 @@ class CheckIn extends Component {
         travelMode: 'WALKING'
       },
       ({ rows }) => {
+        console.log(rows);
         const distance = rows[0].elements[0].distance.value;
-        this.setState({
-          distance: distance,
-          gotCurrentLocation: false,
-          gotRoute: false
-        });
+        this.setState(
+          {
+            distance: distance,
+            gotCurrentLocation: false
+          },
+          () => console.log(this.state.distance, 'Distance')
+        );
       }
     );
   };
 
-  handleCheckInButton = () => {
-    const { distance, nextDestination, allDestinations } = this.state;
+  patchProgress = () => {
     const { userId, routeId } = this.props;
-    console.log(allDestinations);
-    if (distance <= 1000) {
-      console.log(nextDestination);
-      this.props.addCompletedPub(nextDestination);
-
-      getReq('https://tralebackend.herokuapp.com/api/user_routes', {
+    axios
+      .put(`https://tralebackend.herokuapp.com/api/user_routes`, {
+        routes_id: routeId,
         user_id: userId,
-        routes_id: routeId
-      }).then(res => {
-        this.setState(
-          currentState => {
-            return {
-              noticeMsg: `You've arrived at ${nextDestination.pub_name}`,
-              noticeMsgDisplayed: true,
-              routeIndex: currentState.routeIndex + 1,
-              nextDestination:
-                currentState.allDestinations[currentState.routeIndex + 1]
-            };
-          },
-          () => console.log(this.state)
-        );
-      });
+        inc_progress: 1
+      })
+      .then(({ data: { updatedUserRoutes: { progress } } }) =>
+        console.log(progress, 'progress')
+      );
+  };
+
+  handleCheckInButton = () => {
+    this.getCurrentLocation();
+    const { distance, nextDestination } = this.state;
+    if (distance <= 300) {
+      this.props.addCompletedPub(nextDestination);
+      this.setState(
+        currentState => {
+          return {
+            noticeMsg: `You've arrived at ${nextDestination.pub_name}`,
+            noticeMsgDisplayed: true,
+            routeIndex: currentState.routeIndex + 1,
+            nextDestination:
+              currentState.allDestinations[currentState.routeIndex + 1]
+          };
+        },
+        () => {
+          this.patchProgress();
+        }
+      );
     } else {
       this.setState({
         noticeMsg: `You are too far from ${nextDestination.pub_name}!`,
@@ -111,14 +123,17 @@ class CheckIn extends Component {
   componentDidMount() {
     this.getRoute();
     this.getCurrentLocation();
+    this.interval = setInterval(() => this.getCurrentLocation(), 300000);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { gotCurrentLocation, gotRoute } = this.state;
-    if (
-      gotCurrentLocation !== prevState.gotCurrentLocation &&
-      gotRoute !== prevState.gotRoute
-    ) {
+    const {
+      gotCurrentLocation,
+      gotRoute,
+      routeIndex,
+      allDestinations
+    } = this.state;
+    if (gotCurrentLocation && gotRoute && routeIndex < allDestinations.length) {
       this.findDistance();
     }
   }
@@ -152,7 +167,6 @@ class CheckIn extends Component {
                 this.setState({ noticeMsgDisplayed: false });
               }
             }}
-            onClick={() => console.log('click')}
             isDisplayed={noticeMsgDisplayed}
           />
         )}
