@@ -5,6 +5,7 @@ import { Geolocation } from '@capacitor/core';
 import NoticeMsg from './NoticeMsg';
 import { getReq } from '../utils/api';
 import '../css/CheckIn.css';
+import axios from 'axios';
 
 class CheckIn extends Component {
   state = {
@@ -75,28 +76,36 @@ class CheckIn extends Component {
     );
   };
 
-  handleCheckInButton = () => {
-    const { distance, nextDestination, allDestinations } = this.state;
+  patchProgress = () => {
     const { userId, routeId } = this.props;
-    console.log(allDestinations);
-    if (distance <= 1000) {
-      getReq('https://tralebackend.herokuapp.com/api/user_routes', {
+    axios
+      .put(`https://tralebackend.herokuapp.com/api/user_routes`, {
+        routes_id: routeId,
         user_id: userId,
-        routes_id: routeId
-      }).then(res => {
-        this.setState(
-          currentState => {
-            return {
-              noticeMsg: `You've arrived at ${nextDestination.pub_name}`,
-              noticeMsgDisplayed: true,
-              routeIndex: currentState.routeIndex + 1,
-              nextDestination:
-                currentState.allDestinations[currentState.routeIndex + 1]
-            };
-          },
-          () => console.log(this.state)
-        );
-      });
+        inc_progress: 1
+      })
+      .then(({ data: { updatedUserRoutes: { progress } } }) =>
+        console.log(progress)
+      );
+  };
+
+  handleCheckInButton = () => {
+    const { distance, nextDestination } = this.state;
+    if (distance <= 100) {
+      this.setState(
+        currentState => {
+          return {
+            noticeMsg: `You've arrived at ${nextDestination.pub_name}`,
+            noticeMsgDisplayed: true,
+            routeIndex: currentState.routeIndex + 1,
+            nextDestination:
+              currentState.allDestinations[currentState.routeIndex + 1]
+          };
+        },
+        () => {
+          this.patchProgress();
+        }
+      );
     } else {
       this.setState({
         noticeMsg: `You are too far from ${nextDestination.pub_name}!`,
@@ -125,8 +134,7 @@ class CheckIn extends Component {
       noticeMsg,
       noticeMsgDisplayed,
       routeIndex,
-      allDestinations,
-      nextDestination
+      allDestinations
     } = this.state;
     return (
       <IonPage className="CheckIn-Page">
@@ -150,7 +158,6 @@ class CheckIn extends Component {
                 this.setState({ noticeMsgDisplayed: false });
               }
             }}
-            onClick={() => console.log('click')}
             isDisplayed={noticeMsgDisplayed}
           />
         )}

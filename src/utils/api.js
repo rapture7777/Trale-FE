@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const getReq = (url, body) => {
   if (!body) {
     return axios
       .get(url, {
-        headers: { "Content-Type": "application/json" }
+        headers: { 'Content-Type': 'application/json' }
       })
       .then(({ data }) => {
         return data;

@@ -29,12 +29,18 @@ class UserProfile extends React.Component {
   };
 
   fetchUserTrails = () => {
-    const { id, username } = this.props;
+    const { id } = this.props;
     return axios
       .get(`https://tralebackend.herokuapp.com/api/user_routes/${id}`)
       .then(({ data }) => {
         this.setState({ userTrails: data, loading: false });
       });
+  };
+
+  fetchPubAmount = routeId => {
+    return axios
+      .get(`https://tralebackend.herokuapp.com/api/routes/${routeId}`)
+      .then(res => console.log(res));
   };
 
   render() {
@@ -84,14 +90,17 @@ class UserProfile extends React.Component {
                         <p>You have started any trails! Get choosing!</p>
                       </IonItem>
                     ) : (
+                      // eslint-disable-next-line array-callback-return
                       userTrails.map(function(trail) {
                         if (!trail.completed) {
+                          const pubs = this.fetchPubAmount(trail.routes_id);
+                          const progress = trail.progress / pubs.length;
                           return (
                             <IonRow key={trail.id}>
                               <IonItem>
                                 <p>{`The ${trail.route_name} is currently in progress..`}</p>
                               </IonItem>
-                              <IonProgressBar value={0.25}></IonProgressBar>
+                              <IonProgressBar value={progress}></IonProgressBar>
                             </IonRow>
                           );
                         }
@@ -110,9 +119,10 @@ class UserProfile extends React.Component {
                   </IonListHeader>
                   {!userTrails.filter(trail => trail.completed).length ? (
                     <IonItem>
-                      <p>You have not completed any trails! Get drinking!</p>
+                      <p>Yer 'ant done any trails! Get some ale down yer!</p>
                     </IonItem>
                   ) : (
+                    // eslint-disable-next-line array-callback-return
                     userTrails.map(function(trail) {
                       if (trail.completed) {
                         return (

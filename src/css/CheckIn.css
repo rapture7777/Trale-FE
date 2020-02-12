@@ -12,3 +12,10 @@
   padding-top: 72vh;
   position: absolute;
 }
+
+.RoutePick-Button {
+  align-self: center;
+  justify-self: center;
+  padding-top: 60vh;
+  position: absolute;
+}
