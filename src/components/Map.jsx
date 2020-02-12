@@ -25,7 +25,15 @@ class Map extends Component {
       lat: '',
       lng: ''
     },
-    loading: this.props.loading
+    loading: this.props.loading,
+    completedPubs: [],
+    allPubsJustOnce: []
+  };
+
+  addCompletedPub = pub => {
+    this.setState(currentState => {
+      return { completedPubs: [...currentState.completedPubs, pub] };
+    });
   };
 
   updateTrailPubs(id) {
@@ -126,6 +134,7 @@ class Map extends Component {
   }
 
   render() {
+    console.log(this.state);
     const { userLocation, directions, loading } = this.state;
     const { routeId, userId } = this.props;
     let defaultCenter = new google.maps.LatLng(
@@ -137,6 +146,18 @@ class Map extends Component {
       <GoogleMap defaultCenter={defaultCenter} defaultZoom={13}>
         <DirectionsRenderer directions={directions} />
         <Marker position={defaultCenter} />
+        {this.state.completedPubs &&
+          this.state.completedPubs.map(donePub => {
+            console.log(donePub, 'donePub');
+            let position = new google.maps.LatLng(donePub.lat, donePub.lng);
+            return (
+              <Marker
+                position={position}
+                icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                id={donePub.id}
+              />
+            );
+          })}
       </GoogleMap>
     ));
 
@@ -161,7 +182,11 @@ class Map extends Component {
             />
           }
         />
-        <CheckIn routeId={routeId} userId={userId} />
+        <CheckIn
+          routeId={routeId}
+          userId={userId}
+          addCompletedPub={this.addCompletedPub}
+        />
         <RoutePick userId={userId} routeId={routeId} />
       </IonPage>
     );

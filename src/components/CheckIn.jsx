@@ -80,6 +80,9 @@ class CheckIn extends Component {
     const { userId, routeId } = this.props;
     console.log(allDestinations);
     if (distance <= 1000) {
+      console.log(nextDestination);
+      this.props.addCompletedPub(nextDestination);
+
       getReq('https://tralebackend.herokuapp.com/api/user_routes', {
         user_id: userId,
         routes_id: routeId
@@ -125,8 +128,7 @@ class CheckIn extends Component {
       noticeMsg,
       noticeMsgDisplayed,
       routeIndex,
-      allDestinations,
-      nextDestination
+      allDestinations
     } = this.state;
     return (
       <IonPage className="CheckIn-Page">
