@@ -11,7 +11,7 @@ import axios from 'axios';
 import '../css/Map.css';
 import { Plugins } from '@capacitor/core';
 import CheckIn from './CheckIn';
-import RoutePick from './RoutePick';
+// import RoutePick from './RoutePick';
 
 class Map extends Component {
   state = {
@@ -26,8 +26,7 @@ class Map extends Component {
       lng: ''
     },
     loading: this.props.loading,
-    completedPubs: [],
-    allPubsJustOnce: []
+    completedPubs: []
   };
 
   addCompletedPub = pub => {
@@ -153,7 +152,7 @@ class Map extends Component {
             return (
               <Marker
                 position={position}
-                icon="http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                icon="https://img.icons8.com/flat_round/64/000000/checked-2.png"
                 id={donePub.id}
               />
             );

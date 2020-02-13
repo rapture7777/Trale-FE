@@ -96,7 +96,7 @@ class CheckIn extends Component {
   handleCheckInButton = () => {
     this.getCurrentLocation();
     const { distance, nextDestination } = this.state;
-    if (distance <= 300) {
+    if (distance <= 3000) {
       this.props.addCompletedPub(nextDestination);
       this.setState(
         currentState => {
