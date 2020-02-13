@@ -6,7 +6,7 @@ import '../css/CheckIn.css';
 
 class RoutePick extends Component {
   state = {
-    route_name: '',
+    route_name: null,
     hideButton: false,
     usersRoutes: []
   };
@@ -26,16 +26,33 @@ class RoutePick extends Component {
       .getReq(
         `https://tralebackend.herokuapp.com/api/user_routes/${this.props.userId}`
       )
-      .then(res => this.setState({ usersRoutes: res }));
+      .then(res =>
+        this.setState({ usersRoutes: res }, () =>
+          console.log(this.state.usersRoutes)
+        )
+      )
+      .catch(err => console.log(err));
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { route_name, usersRoutes, hideButton } = this.state;
+    if (route_name && usersRoutes && !hideButton) {
+      if (
+        usersRoutes.filter(route => route.routes_id === this.props.routeId)
+          .length
+      ) {
+        this.setState({ hideButton: true });
+      }
+    }
   }
 
   handleClick = () => {
     const { usersRoutes } = this.state;
-    const hasRoute = usersRoutes.filter(
-      route => route.routes_id === this.props.routeId
-    ).length;
 
-    if (!hasRoute) {
+    if (
+      !usersRoutes.filter(route => route.routes_id === this.props.routeId)
+        .length
+    ) {
       const url = `https://tralebackend.herokuapp.com/api/user_routes`;
       postReq(
         url,
@@ -45,8 +62,6 @@ class RoutePick extends Component {
       ).then(res => {
         this.setState({ hideButton: true });
       });
-    } else {
-      console.log('restart route');
     }
   };
 
