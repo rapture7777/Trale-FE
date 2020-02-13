@@ -152,8 +152,13 @@ class Map extends Component {
             return (
               <Marker
                 position={position}
-                icon="https://img.icons8.com/flat_round/64/000000/checked-2.png"
+                icon={{
+                  url:
+                    'https://img.icons8.com/flat_round/64/000000/checked-2.png',
+                  size: new google.maps.Size(71, 71)
+                }}
                 id={donePub.id}
+                zIndex="999"
               />
             );
           })}
