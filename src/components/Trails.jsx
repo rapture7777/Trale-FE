@@ -57,7 +57,7 @@ class Trails extends Component {
                     <IonCardHeader>
                       <IonCardTitle>{route.route_name}</IonCardTitle>
                     </IonCardHeader>
-                    <IonCardContent>{route.description}</IonCardContent>
+                    <IonCardContent>{route.route_description}</IonCardContent>
                   </IonCard>
                 </Link>
               );

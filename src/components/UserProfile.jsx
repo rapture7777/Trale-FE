@@ -21,11 +21,29 @@ import '../css/UserProfile.css';
 class UserProfile extends React.Component {
   state = {
     loading: true,
-    userTrails: []
+    userTrails: [],
+    avatar: '',
+    bio: ''
   };
 
   componentDidMount = () => {
+    this.fetchUserDetails();
     this.fetchUserTrails();
+  };
+
+  fetchUserDetails = () => {
+    const { userId } = this.props;
+    return axios
+      .get(`https://tralebackend.herokuapp.com/api/users/${userId}`)
+      .then(userData => {
+        let { bio } = userData.data.user;
+        const { avatar } = userData.data.user;
+
+        this.setState({
+          avatar: avatar,
+          bio: bio
+        });
+      });
   };
 
   fetchUserTrails = () => {
@@ -34,13 +52,20 @@ class UserProfile extends React.Component {
       .get(`https://tralebackend.herokuapp.com/api/user_routes/${userId}`)
       .then(({ data }) => {
         this.setState({ userTrails: data, loading: false });
+      })
+      .catch(() => {
+        this.setState({ loading: false });
       });
   };
 
   render() {
-    const { avatar, bio } = this.props.username;
+    const { avatar, bio } = this.state;
     const { username } = this.props;
     const { userTrails, loading } = this.state;
+
+    console.log(this.props, 'props');
+    console.log(avatar, 'avatar from backend ');
+
     return loading ? (
       <IonPage className="Loading-Page">
         <IonSpinner className="Loading-Spinner" name="lines" />
