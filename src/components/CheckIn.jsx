@@ -22,7 +22,9 @@ class CheckIn extends Component {
 
   async getCurrentLocation() {
     console.log('getting current location');
-    const position = await Geolocation.getCurrentPosition();
+    const position = await Geolocation.getCurrentPosition({
+      enableHighAccuracy: true
+    });
     if (position)
       this.setState(
         {
@@ -123,7 +125,7 @@ class CheckIn extends Component {
   componentDidMount() {
     this.getRoute();
     this.getCurrentLocation();
-    this.interval = setInterval(() => this.getCurrentLocation(), 300000);
+    this.interval = setInterval(() => this.getCurrentLocation(), 60000);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -146,7 +148,8 @@ class CheckIn extends Component {
       allDestinations
     } = this.state;
     return (
-      <IonPage className="CheckIn-Page">
+      // <IonPage className="CheckIn-Page">
+      <>
         {routeIndex <= allDestinations.length - 1 && (
           <IonButton
             className="CheckIn-Button"
@@ -184,7 +187,8 @@ class CheckIn extends Component {
             isDisplayed={noticeMsgDisplayed}
           />
         )}
-      </IonPage>
+      </>
+      // </IonPage>
     );
   }
 }

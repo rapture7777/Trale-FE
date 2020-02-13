@@ -26,7 +26,7 @@ class NavBar extends Component {
   };
 
   getRouteId = routeId => {
-    this.setState({ routeId: routeId }, () => {});
+    this.setState({ routeId: routeId });
   };
 
   render() {
@@ -64,8 +64,9 @@ class NavBar extends Component {
                 render={() => (
                   <UserProfile
                     username={username}
-                    id={id}
+                    userId={id}
                     userTrails={this.state.userTrails}
+                    routeId={this.state.routeId}
                   />
                 )}
               />

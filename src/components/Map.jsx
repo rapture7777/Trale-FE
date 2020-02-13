@@ -11,7 +11,7 @@ import axios from 'axios';
 import '../css/Map.css';
 import { Plugins } from '@capacitor/core';
 import CheckIn from './CheckIn';
-// import RoutePick from './RoutePick';
+import RoutePick from './RoutePick';
 
 class Map extends Component {
   state = {
@@ -186,7 +186,7 @@ class Map extends Component {
           userId={userId}
           addCompletedPub={this.addCompletedPub}
         />
-        {/* <RoutePick userId={userId} routeId={routeId} /> */}
+        <RoutePick userId={userId} routeId={routeId} />
       </IonPage>
     );
   }
