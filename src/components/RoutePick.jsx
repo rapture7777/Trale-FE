@@ -6,7 +6,9 @@ import '../css/CheckIn.css';
 
 class RoutePick extends Component {
   state = {
-    route_name: ''
+    route_name: '',
+    hideButton: false,
+    usersRoutes: []
   };
 
   componentDidMount() {
@@ -19,30 +21,46 @@ class RoutePick extends Component {
           console.log(this.state.route_name);
         })
       );
+
+    utils
+      .getReq(
+        `https://tralebackend.herokuapp.com/api/user_routes/${this.props.userId}`
+      )
+      .then(res => this.setState({ usersRoutes: res }));
   }
 
   handleClick = () => {
-    const url = `https://tralebackend.herokuapp.com/api/user_routes`;
-    postReq(
-      url,
-      this.props.userId,
-      this.props.routeId,
-      this.state.route_name
-    ).then(res => {
-      console.log(res);
-    });
+    const { usersRoutes } = this.state;
+    const hasRoute = usersRoutes.filter(
+      route => route.routes_id === this.props.routeId
+    ).length;
+
+    if (!hasRoute) {
+      const url = `https://tralebackend.herokuapp.com/api/user_routes`;
+      postReq(
+        url,
+        this.props.userId,
+        this.props.routeId,
+        this.state.route_name
+      ).then(res => {
+        this.setState({ hideButton: true });
+      });
+    } else {
+      console.log('restart route');
+    }
   };
 
   render() {
+    const { hideButton } = this.state;
     return (
-      // <IonPage className="CheckIn-Page">
-      <IonButton
-        className="RoutePick-Button"
-        onClick={() => this.handleClick()}
-      >
-        Select Route!
-      </IonButton>
-      // </IonPage>
+      !hideButton && (
+        <IonButton
+          className="RoutePick-Button"
+          onClick={() => this.handleClick()}
+        >
+          Select Route!
+        </IonButton>
+      )
     );
   }
 }

@@ -9,13 +9,14 @@
 .CheckIn-Button {
   align-self: center;
   justify-self: center;
-  padding-top: 72vh;
+  margin-top: 85vh;
   position: absolute;
 }
 
 .RoutePick-Button {
   align-self: center;
   justify-self: center;
-  padding-top: 60vh;
+  margin-top: 85vh;
+  z-index: 999;
   position: absolute;
 }

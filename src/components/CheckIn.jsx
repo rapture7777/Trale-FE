@@ -147,7 +147,8 @@ class CheckIn extends Component {
       allDestinations
     } = this.state;
     return (
-      <IonPage className="CheckIn-Page">
+      // <IonPage className="CheckIn-Page">
+      <>
         {routeIndex <= allDestinations.length - 1 && (
           <IonButton
             className="CheckIn-Button"
@@ -185,7 +186,8 @@ class CheckIn extends Component {
             isDisplayed={noticeMsgDisplayed}
           />
         )}
-      </IonPage>
+      </>
+      // </IonPage>
     );
   }
 }

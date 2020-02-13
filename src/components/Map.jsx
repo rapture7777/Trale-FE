@@ -162,7 +162,7 @@ class Map extends Component {
           }
         />
         <CheckIn routeId={routeId} userId={userId} />
-        {/* <RoutePick userId={userId} routeId={routeId} /> */}
+        <RoutePick userId={userId} routeId={routeId} />
       </IonPage>
     );
   }
