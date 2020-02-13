@@ -98,7 +98,7 @@ class CheckIn extends Component {
   handleCheckInButton = () => {
     this.getCurrentLocation();
     const { distance, nextDestination } = this.state;
-    if (distance <= 3000) {
+    if (distance <= 200) {
       this.props.addCompletedPub(nextDestination);
       this.setState(
         currentState => {
@@ -139,6 +139,17 @@ class CheckIn extends Component {
       this.findDistance();
     }
   }
+
+  completedTrail = () => {
+    const { userId, routeId } = this.props;
+    return axios
+      .put(`https://tralebackend.herokuapp.com/api/user_routes`, {
+        routes_id: routeId,
+        user_id: userId,
+        completed: true
+      })
+      .then(res => console.log(res));
+  };
 
   render() {
     const {
@@ -181,6 +192,7 @@ class CheckIn extends Component {
               text: 'Thanks!',
               handler: () => {
                 this.setState({ noticeMsgDisplayed: false });
+                this.completedTrail();
               }
             }}
             onClick={() => console.log('click')}

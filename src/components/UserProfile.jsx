@@ -103,9 +103,9 @@ class UserProfile extends React.Component {
                     <IonListHeader>
                       <IonLabel>In Progress Trails</IonLabel>
                     </IonListHeader>
-                    {userTrails.filter(trail => trail.completed).length ? (
+                    {!userTrails.filter(trail => !trail.completed).length ? (
                       <IonItem>
-                        <p>You have started any trails! Get choosing!</p>
+                        <p>You have no trails in progress.</p>
                       </IonItem>
                     ) : (
                       // eslint-disable-next-line array-callback-return
@@ -116,7 +116,9 @@ class UserProfile extends React.Component {
                               <IonItem>
                                 <p>{`The ${trail.route_name} is currently in progress..`}</p>
                               </IonItem>
-                              <IonProgressBar value={0.25}></IonProgressBar>
+                              <IonProgressBar
+                                value={trail.progress / trail.route_PubCount}
+                              ></IonProgressBar>
                             </IonRow>
                           );
                         }
@@ -144,7 +146,7 @@ class UserProfile extends React.Component {
                         return (
                           <IonRow key={trail.id}>
                             <IonItem>
-                              <p>{`The ${trail.route_name} is currently in progress..`}</p>
+                              <p>{`${trail.route_name}`}</p>
                             </IonItem>
                             <IonProgressBar value={1}></IonProgressBar>
                           </IonRow>
