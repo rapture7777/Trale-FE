@@ -35,7 +35,7 @@ class Trails extends Component {
       </IonPage>
     ) : (
       <IonPage className="Trails-page">
-        <IonContent>
+        <IonContent className="Trails-Content">
           <h3 className="Title">Trails</h3>
           {this.state.trails.length &&
             this.state.trails.map(route => {
@@ -45,6 +45,7 @@ class Trails extends Component {
                   to={{
                     pathname: `/components/Map/${route.id}`
                   }}
+                  className="Card-Link"
                 >
                   <IonCard
                     className="Trail-Card"
@@ -55,9 +56,13 @@ class Trails extends Component {
                     }}
                   >
                     <IonCardHeader>
-                      <IonCardTitle>{route.route_name}</IonCardTitle>
+                      <IonCardTitle className="Card-Name">
+                        {route.route_name}
+                      </IonCardTitle>
                     </IonCardHeader>
-                    <IonCardContent>{route.route_description}</IonCardContent>
+                    <IonCardContent className="Card-Description">
+                      {route.route_description}
+                    </IonCardContent>
                   </IonCard>
                 </Link>
               );

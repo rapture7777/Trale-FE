@@ -154,11 +154,11 @@ class Map extends Component {
                 position={position}
                 icon={{
                   url:
-                    'https://img.icons8.com/flat_round/64/000000/checked-2.png',
-                  size: new google.maps.Size(71, 71)
+                    'https://img.icons8.com/flat_round/64/000000/checked-2.png'
                 }}
                 id={donePub.id}
-                zIndex="999"
+                zIndex={9999999999}
+                size={25}
               />
             );
           })}
