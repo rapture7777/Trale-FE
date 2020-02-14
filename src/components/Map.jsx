@@ -170,7 +170,7 @@ class Map extends Component {
         {routeId ? (
           <IonSpinner className="Loading-Spinner" name="lines" />
         ) : (
-          <h3 className="Loading-Text">Please select a trail...</h3>
+          <h3 className="Loading-Text">Please select a TrAle...</h3>
         )}
       </IonPage>
     ) : (

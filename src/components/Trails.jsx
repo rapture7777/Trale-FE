@@ -36,7 +36,7 @@ class Trails extends Component {
     ) : (
       <IonPage className="Trails-page">
         <IonContent className="Trails-Content">
-          <h3 className="Title">Trails</h3>
+          <h3 className="Title">TrAles</h3>
           {this.state.trails.length &&
             this.state.trails.map(route => {
               return (

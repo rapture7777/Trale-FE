@@ -168,7 +168,7 @@ class CheckIn extends Component {
               this.handleCheckInButton();
             }}
           >
-            Check-in
+            <b>Check-in</b>
           </IonButton>
         )}
         {noticeMsg && (

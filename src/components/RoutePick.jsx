@@ -73,7 +73,7 @@ class RoutePick extends Component {
           className="RoutePick-Button"
           onClick={() => this.handleClick()}
         >
-          Select Route!
+          <b>Select Route!</b>
         </IonButton>
       )
     );

@@ -24,36 +24,6 @@
   display: flex;
 }
 
-/* ion-page {
-  --background: none;
-  background-image: linear-gradient(
-    to right top,
-    #c3c3c3,
-    #bfc0cf,
-    #b7bedd,
-    #a9bdea,
-    #93bdf8
-  ) !important;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
-
-/* ion-content {
-  --background: none;
-  background-image: linear-gradient(
-    to right top,
-    #c3c3c3,
-    #bfc0cf,
-    #b7bedd,
-    #a9bdea,
-    #93bdf8
-  ) !important;
-  background-position: center top;
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
-
 ion-card {
   --background: white;
 }

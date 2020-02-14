@@ -1,6 +1,8 @@
 .Title {
   text-align: center;
   padding-bottom: 0;
+  color: orange !important;
+  font-size: 20pt;
 }
 
 .Title h3 {
@@ -31,7 +33,7 @@
 
 .Trail-Card {
   background-image: linear-gradient(
-    to bottom,
+    to top,
     #ef9000,
     #f3a130,
     #f7b14f,

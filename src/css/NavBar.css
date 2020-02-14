@@ -8,10 +8,12 @@
     #ffd087
   ) !important;
   box-shadow: 0px -1px 12px 4px rgba(152, 152, 152, 0.47);
-  padding-bottom: 3%;
+  padding-bottom: 2%;
+  padding-top: 2%;
   color: white !important;
 }
 
 b {
+  font-size: 14pt;
   color: white !important;
 }

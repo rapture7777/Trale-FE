@@ -76,7 +76,7 @@ class NavBar extends Component {
           <IonTabBar slot="bottom" translucent="true" className="Tabs">
             <IonTabButton tab="trails" href="/">
               <IonLabel>
-                <b>Trails</b>
+                <b>TrAles</b>
               </IonLabel>
             </IonTabButton>
             <IonTabButton tab="map" href="/components/Map/*">
