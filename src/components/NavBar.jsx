@@ -86,7 +86,9 @@ class NavBar extends Component {
             </IonTabButton>
 
             <IonTabButton tab="profile" href="/components/UserProfile">
-              <IonLabel>Profile</IonLabel>
+              <IonLabel>
+                <b>Profile</b>
+              </IonLabel>
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
