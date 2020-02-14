@@ -10,21 +10,37 @@
 
 .Trails-page {
   height: 100vh;
-  padding-top: 5%;
 }
 
 .Trails-Content {
   height: 100%;
   position: absolute;
+  background: none;
+  background-image: linear-gradient(
+    to right top,
+    #c3c3c3,
+    #bfc0cf,
+    #b7bedd,
+    #a9bdea,
+    #93bdf8
+  ) !important;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .Trail-Card {
   background-image: linear-gradient(
-    to top,
-    #c0cfe9,
-    #cdd5e9,
-    #d8dbe9,
-    #e2e2e9,
-    #e9e9e9
+    to bottom,
+    #ef9000,
+    #f3a130,
+    #f7b14f,
+    #fbc16b,
+    #ffd087
   ) !important;
+  color: white !important;
+}
+
+ion-card-title {
+  color: white !important;
 }

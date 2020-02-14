@@ -6,9 +6,10 @@
 }
 
 .Map {
+  font-family: 'Lato', sans-serif !important;
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: absolute !important;
 }
 
 .Map-Content {
