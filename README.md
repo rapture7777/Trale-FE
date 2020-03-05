@@ -1,68 +1,27 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# trAle
 
-## Available Scripts
+This is a hybrid mobile app called trAle, designed to allow users to find nearby ale trails, view them on a map and track their progress along them. It is our final project for Northcoders.
 
-In the project directory, you can run:
+## Getting started
 
-### `npm start`
+In order to run a desktop version of the app, first clone this repository to a directory in your machine. Run 'npm install' in order to install the required dependencies, and then run 'npm start' in order to run the app in your browser, at the address http://localhost:3000.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Features
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+The user can click the TrAles tab to view a list of local trails in Leeds. Clicking one brings the user to the Map tab where the trail is visualised on the screen via Google Maps, with each pub displayed by a marker. The markers can be clicked on for information about the pub, and if the user's geolocation is close enough, the pub can be checked into. On Chrome, you can spoof your geolocation by pressing Ctrl-Shift-I to bring up developer tools, then click the top right three dots, more tools, and sensors.
 
-### `npm test`
+The user's profile on the profile tab will be updated with the progress of all trails they have begun and also list any trails they have completed. The user can create an account in the profile tab, where they can provide a username and password and receive a verification email.
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Built with
 
-### `npm run build`
+* Ionic Framework
+* React
+* React Google Maps
+* Capacitor
+* React Router
+* AWS Amplify
+* Axios
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Authors 
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+This app was made by Adam Valentine, Faisal Fehad, Ian Naylor, Jake Tilby-Baxter, Roan Lill-Bovill and Terry Black.
